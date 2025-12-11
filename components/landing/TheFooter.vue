@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Github, Heart } from 'lucide-vue-next'
+import { Github } from 'lucide-vue-next'
 
 const currentYear = new Date().getFullYear()
 </script>
@@ -47,14 +47,9 @@ const currentYear = new Date().getFullYear()
 
       <!-- Divider -->
       <div class="border-t border-gray-800 mt-12 pt-8">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-center">
-          <p class="text-gray-500 text-sm">
-            © {{ currentYear }} Finara. All rights reserved.
-          </p>
-          <p class="text-gray-500 text-sm flex items-center gap-1">
-            Made with <Heart class="w-4 h-4 text-red-500 fill-red-500" /> for Indonesian financial literacy
-          </p>
-        </div>
+        <p class="text-gray-500 text-sm text-center">
+          © {{ currentYear }} Finara. All rights reserved.
+        </p>
       </div>
     </div>
   </footer>
