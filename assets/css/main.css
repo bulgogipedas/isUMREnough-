@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-800;
+  }
+}
+
+@layer components {
+  /* iOS-style input styling */
+  .input-ios {
+    @apply w-full px-4 py-3 bg-white border border-gray-200 rounded-xl
+           text-gray-800 placeholder-gray-400
+           focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-transparent
+           transition-all duration-200;
+  }
+
+  /* Card iOS styling */
+  .card-ios {
+    @apply bg-white rounded-3xl shadow-ios p-6
+           transition-all duration-300 ease-out;
+  }
+
+  .card-ios-hover {
+    @apply hover:shadow-ios-lg hover:-translate-y-1;
+  }
+
+  /* Button primary (Yellow) */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           px-6 py-3 bg-primary-400 text-gray-900 font-semibold
+           rounded-xl shadow-ios
+           hover:bg-primary-500 hover:shadow-ios-lg hover:-translate-y-0.5
+           active:translate-y-0 active:shadow-ios
+           focus:outline-none focus:ring-2 focus:ring-primary-400 focus:ring-offset-2
+           transition-all duration-200;
+  }
+
+  /* Button secondary */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2
+           px-6 py-3 bg-gray-100 text-gray-800 font-semibold
+           rounded-xl shadow-sm
+           hover:bg-gray-200 hover:shadow-ios hover:-translate-y-0.5
+           active:translate-y-0
+           focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2
+           transition-all duration-200;
+  }
+}
+
+/* Leaflet map custom styles */
+.leaflet-container {
+  @apply rounded-3xl;
+  font-family: inherit !important;
+}
+
+.leaflet-popup-content-wrapper {
+  @apply rounded-2xl shadow-ios-lg;
+}
+
+.leaflet-popup-content {
+  @apply m-0 p-4;
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400;
+}
