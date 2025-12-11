@@ -63,3 +63,4 @@ const balanceBgColor = computed(() => getBalanceBgColor(props.balance))
     </div>
   </BaseCard>
 </template>
+

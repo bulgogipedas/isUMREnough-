@@ -39,3 +39,4 @@ const config = computed(() => getStatusConfig(props.status))
     </div>
   </BaseCard>
 </template>
+

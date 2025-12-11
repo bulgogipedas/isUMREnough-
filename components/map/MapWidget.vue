@@ -2,51 +2,41 @@
 /**
  * Interactive Map Widget for Indonesia provinces
  * 
- * Displays an interactive map where users can click on provinces
- * to select them for financial calculations.
+ * CRITICAL PERFORMANCE OPTIMIZATIONS:
+ * - GeoJSON stored in shallowRef (prevents deep reactivity on 1000s of coordinates)
+ * - Style updates via direct Leaflet API (no Vue re-renders)
+ * - Proper cleanup on unmount
  */
+import { shallowRef } from 'vue'
 import { LMap, LTileLayer, LGeoJson } from '@vue-leaflet/vue-leaflet'
-import type { StyleFunction, Layer, LeafletMouseEvent } from 'leaflet'
-import { useGeoJson, type ProvinceGeoJsonFeature } from '~/composables/useGeoJson'
+import type { StyleFunction, Layer, LeafletMouseEvent, Map as LeafletMap, GeoJSON as LeafletGeoJSON } from 'leaflet'
 import { useCalculatorStore } from '~/stores/calculator'
 import { getUmpByProvinceName } from '~/utils/constants'
-import type { ProvinceOption } from '~/types'
-
-defineProps<{
-  provinceList: ProvinceOption[]
-}>()
+import type { ProvinceGeoJsonFeature, ProvinceGeoJsonProperties, IndonesiaGeoJson } from '~/types'
 
 const store = useCalculatorStore()
-const { geoJsonData, isLoading, error, fetchGeoJson, getProvinceName, generateProvinceId } = useGeoJson()
 
 // Map configuration
 const MAP_CENTER: [number, number] = [-2.5, 118]
 const MAP_ZOOM = 5
 const TILE_URL = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-const TILE_ATTRIBUTION = '&copy; OpenStreetMap contributors &copy; CARTO'
+const TILE_ATTRIBUTION = '&copy; OpenStreetMap &copy; CARTO'
 
-// Map state
-const center = ref<[number, number]>(MAP_CENTER)
-const zoom = ref(MAP_ZOOM)
+// Local state
+const isLoading = ref(true)
+const error = ref<string | null>(null)
 
-// Hover state
+// CRITICAL: Use shallowRef to prevent Vue from deeply proxying GeoJSON
+// This is essential because GeoJSON has thousands of coordinate points
+const geoJsonData = shallowRef<IndonesiaGeoJson | null>(null)
+
+// Map references for cleanup and direct manipulation
+const mapRef = ref<{ leafletObject: LeafletMap } | null>(null)
+const geoJsonLayerRef = shallowRef<LeafletGeoJSON | null>(null)
+
+// Hover state (simple primitives, safe to be reactive)
 const hoveredProvinceId = ref<string | null>(null)
 const hoveredProvinceName = ref<string>('')
-
-// GeoJSON layer reference
-const geoJsonRef = ref<InstanceType<typeof LGeoJson> | null>(null)
-
-// Fetch GeoJSON on mount
-onMounted(async () => {
-  await fetchGeoJson()
-})
-
-// Update map styling when selection changes
-watch(() => store.selectedProvinceId, () => {
-  if (geoJsonRef.value?.leafletObject) {
-    geoJsonRef.value.leafletObject.setStyle(geoJsonStyle)
-  }
-})
 
 // Style colors
 const COLORS = {
@@ -54,23 +44,69 @@ const COLORS = {
   hover: '#facc15',
   selected: '#eab308',
   border: '#ffffff',
-}
+} as const
+
+// Track current selection for style function
+let currentSelectedId: string | null = null
+
+// Load GeoJSON from store (non-reactive cache)
+onMounted(async () => {
+  try {
+    isLoading.value = true
+    const data = await store.loadGeoJson()
+    // Assign to shallowRef - Vue won't proxy the contents
+    geoJsonData.value = data
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Gagal memuat peta'
+  } finally {
+    isLoading.value = false
+  }
+})
+
+// Cleanup on unmount - CRITICAL for memory
+onUnmounted(() => {
+  if (mapRef.value?.leafletObject) {
+    mapRef.value.leafletObject.remove()
+  }
+  geoJsonLayerRef.value = null
+})
+
+// Update styles when selection changes - DIRECT LEAFLET API (no Vue re-render)
+watch(() => store.selectedProvinceId, (newId) => {
+  currentSelectedId = newId
+  
+  // Use direct Leaflet API to update styles - much faster than Vue reactivity
+  if (geoJsonLayerRef.value) {
+    geoJsonLayerRef.value.setStyle((feature) => {
+      if (!feature) return {}
+      const props = feature.properties as ProvinceGeoJsonProperties
+      const provinceId = props.normalizedId as string
+      const isSelected = provinceId === newId
+      
+      return {
+        fillColor: isSelected ? COLORS.selected : COLORS.default,
+        fillOpacity: isSelected ? 0.8 : 0.5,
+        color: COLORS.border,
+        weight: isSelected ? 2.5 : 1,
+        opacity: 1,
+      }
+    })
+  }
+})
 
 /**
- * Style function for GeoJSON features
+ * Style function for initial GeoJSON render
  */
 const geoJsonStyle: StyleFunction = (feature) => {
   if (!feature) return {}
 
-  const props = feature.properties as ProvinceGeoJsonFeature['properties']
+  const props = feature.properties as ProvinceGeoJsonProperties
   const provinceId = props.normalizedId as string
-
-  const isSelected = provinceId === store.selectedProvinceId
-  const isHovered = provinceId === hoveredProvinceId.value
+  const isSelected = provinceId === currentSelectedId
 
   return {
-    fillColor: isSelected ? COLORS.selected : isHovered ? COLORS.hover : COLORS.default,
-    fillOpacity: isSelected ? 0.8 : isHovered ? 0.6 : 0.5,
+    fillColor: isSelected ? COLORS.selected : COLORS.default,
+    fillOpacity: isSelected ? 0.8 : 0.5,
     color: COLORS.border,
     weight: isSelected ? 2.5 : 1,
     opacity: 1,
@@ -78,13 +114,20 @@ const geoJsonStyle: StyleFunction = (feature) => {
 }
 
 /**
+ * Called when GeoJSON layer is ready
+ */
+const onGeoJsonReady = (layer: LeafletGeoJSON) => {
+  geoJsonLayerRef.value = layer
+}
+
+/**
  * GeoJSON options with event handlers
  */
-const geoJsonOptions = computed(() => ({
+const geoJsonOptions = {
   style: geoJsonStyle,
   onEachFeature: (feature: ProvinceGeoJsonFeature, layer: Layer) => {
-    const name = getProvinceName(feature.properties)
-    const id = generateProvinceId(name)
+    const name = store.getProvinceName(feature.properties)
+    const id = feature.properties.normalizedId as string
 
     layer.on({
       click: () => handleProvinceClick(id, name),
@@ -92,22 +135,18 @@ const geoJsonOptions = computed(() => ({
       mouseout: (e: LeafletMouseEvent) => handleMouseOut(e),
     })
   },
-}))
-
-/**
- * Handle province click - select province in store
- */
-const handleProvinceClick = (id: string, name: string) => {
-  const umpData = getUmpByProvinceName(name)
-  if (umpData) {
-    store.selectProvince(umpData.id, umpData.name)
-  } else {
-    store.selectProvince(id, name)
-  }
 }
 
 /**
- * Handle mouse over - highlight province
+ * Handle province click - just update store, style updates via watcher
+ */
+const handleProvinceClick = (id: string, name: string) => {
+  const umpData = getUmpByProvinceName(name)
+  store.selectProvince(umpData?.id || id, umpData?.name || name)
+}
+
+/**
+ * Handle mouse over - direct style manipulation (not reactive)
  */
 const handleMouseOver = (e: LeafletMouseEvent, id: string, name: string) => {
   hoveredProvinceId.value = id
@@ -116,16 +155,18 @@ const handleMouseOver = (e: LeafletMouseEvent, id: string, name: string) => {
   const layer = e.target
   const umpData = getUmpByProvinceName(name)
   const actualId = umpData?.id || id
+  const isSelected = actualId === store.selectedProvinceId
 
+  // Direct Leaflet style update - bypasses Vue
   layer.setStyle({
-    fillColor: actualId === store.selectedProvinceId ? COLORS.selected : COLORS.hover,
+    fillColor: isSelected ? COLORS.selected : COLORS.hover,
     fillOpacity: 0.7,
     weight: 2,
   })
 }
 
 /**
- * Handle mouse out - reset highlight
+ * Handle mouse out - direct style manipulation (not reactive)
  */
 const handleMouseOut = (e: LeafletMouseEvent) => {
   hoveredProvinceId.value = null
@@ -133,19 +174,18 @@ const handleMouseOut = (e: LeafletMouseEvent) => {
 
   const layer = e.target
   const feature = layer.feature as ProvinceGeoJsonFeature
-  const name = getProvinceName(feature.properties)
+  const name = store.getProvinceName(feature.properties)
   const umpData = getUmpByProvinceName(name)
   const actualId = umpData?.id || (feature.properties.normalizedId as string)
+  const isSelected = actualId === store.selectedProvinceId
 
+  // Direct Leaflet style update - bypasses Vue
   layer.setStyle({
-    fillColor: actualId === store.selectedProvinceId ? COLORS.selected : COLORS.default,
-    fillOpacity: actualId === store.selectedProvinceId ? 0.8 : 0.5,
-    weight: actualId === store.selectedProvinceId ? 2.5 : 1,
+    fillColor: isSelected ? COLORS.selected : COLORS.default,
+    fillOpacity: isSelected ? 0.8 : 0.5,
+    weight: isSelected ? 2.5 : 1,
   })
 }
-
-// Key for forcing GeoJSON re-render (without Date.now() for performance)
-const geoJsonKey = computed(() => `geojson-${store.selectedProvinceId}`)
 </script>
 
 <template>
@@ -177,7 +217,7 @@ const geoJsonKey = computed(() => `geojson-${store.selectedProvinceId}`)
 
     <!-- Province hover tooltip -->
     <div
-      v-if="hoveredProvinceName && !isLoading"
+      v-show="hoveredProvinceName && !isLoading"
       class="absolute top-4 left-4 z-[1000] bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-ios"
     >
       <p class="text-gray-800 font-medium">{{ hoveredProvinceName }}</p>
@@ -185,7 +225,7 @@ const geoJsonKey = computed(() => `geojson-${store.selectedProvinceId}`)
 
     <!-- Selected province indicator -->
     <div
-      v-if="store.selectedProvinceName && !isLoading"
+      v-show="store.selectedProvinceName && !isLoading"
       class="absolute bottom-4 left-4 z-[1000] bg-primary-400 px-4 py-2 rounded-xl shadow-ios"
     >
       <p class="text-gray-900 font-semibold text-sm">
@@ -195,7 +235,7 @@ const geoJsonKey = computed(() => `geojson-${store.selectedProvinceId}`)
 
     <!-- Instructions -->
     <div
-      v-if="!store.selectedProvinceName && !isLoading && !error"
+      v-show="!store.selectedProvinceName && !isLoading && !error"
       class="absolute top-4 right-4 z-[1000] bg-white/95 backdrop-blur-sm px-4 py-2 rounded-xl shadow-ios"
     >
       <p class="text-gray-600 text-sm">👆 Klik provinsi untuk memilih</p>
@@ -204,8 +244,9 @@ const geoJsonKey = computed(() => `geojson-${store.selectedProvinceId}`)
     <!-- The Map -->
     <LMap
       v-if="!error"
-      :zoom="zoom"
-      :center="center"
+      ref="mapRef"
+      :zoom="MAP_ZOOM"
+      :center="MAP_CENTER"
       :use-global-leaflet="false"
       :options="{
         zoomControl: true,
@@ -221,12 +262,12 @@ const geoJsonKey = computed(() => `geojson-${store.selectedProvinceId}`)
         :options="{ maxZoom: 19 }"
       />
 
+      <!-- No :key - prevents expensive re-renders -->
       <LGeoJson
         v-if="geoJsonData"
-        ref="geoJsonRef"
-        :key="geoJsonKey"
         :geojson="geoJsonData"
         :options="geoJsonOptions"
+        @ready="onGeoJsonReady"
       />
     </LMap>
   </div>

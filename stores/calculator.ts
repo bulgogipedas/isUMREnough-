@@ -1,60 +1,94 @@
 import { defineStore } from 'pinia'
+import { markRaw } from 'vue'
+import Papa from 'papaparse'
+import { UMP_DATA, getUmpByProvinceName } from '~/utils/constants'
 import type {
   ProvinceData,
   CalculationResult,
-  CalculatorState,
   FinancialStatus,
+  ProvinceOption,
+  ExpenditureCSVRow,
+  IndonesiaGeoJson,
+  ProvinceGeoJsonProperties,
 } from '~/types'
+
+const GEOJSON_URL = 'https://raw.githubusercontent.com/superpikar/indonesia-geojson/master/indonesia-province.json'
+
+// GeoJSON cache - OUTSIDE of reactive state to prevent Vue proxying
+let geoJsonCache: IndonesiaGeoJson | null = null
+
+interface CalculatorState {
+  // User inputs
+  income: number
+  dependents: number
+  selectedProvinceId: string | null
+  selectedProvinceName: string
+
+  // Data cache (loaded once, reused)
+  provinceData: Record<string, ProvinceData>
+  
+  // NOTE: geoJsonData removed from state - stored in non-reactive cache
+
+  // Loading states
+  isLoading: boolean
+  isDataLoaded: boolean
+  isGeoJsonLoaded: boolean
+  error: string | null
+}
 
 export const useCalculatorStore = defineStore('calculator', {
   state: (): CalculatorState => ({
-    income: 0,
+    income: 5000000,
     dependents: 1,
     selectedProvinceId: null,
     selectedProvinceName: '',
     provinceData: {},
     isLoading: false,
     isDataLoaded: false,
+    isGeoJsonLoaded: false,
     error: null,
   }),
 
   getters: {
     /**
-     * Get current province data based on selection
+     * Get current province data
      */
-    currentProvinceData(): ProvinceData | null {
+    currentProvince(): ProvinceData | null {
       if (!this.selectedProvinceId) return null
       return this.provinceData[this.selectedProvinceId] || null
     },
 
     /**
-     * Calculate financial results based on inputs
+     * Get sorted province list for dropdown
      */
-    calculationResult(): CalculationResult | null {
-      const provinceData = this.currentProvinceData
-      if (!provinceData || this.income <= 0 || this.dependents <= 0) {
-        return null
-      }
+    provinceList(): ProvinceOption[] {
+      return Object.entries(this.provinceData)
+        .filter(([_, data]) => data.expenditurePerCapita > 0)
+        .map(([id, data]) => ({
+          id,
+          name: data.name,
+          expenditure: data.expenditurePerCapita,
+          ump: data.ump,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name, 'id'))
+    },
 
-      if (provinceData.expenditurePerCapita <= 0) {
-        return null
-      }
+    /**
+     * Calculate financial results
+     */
+    calculationResults(): CalculationResult | null {
+      const province = this.currentProvince
+      if (!province || province.expenditurePerCapita === 0) return null
 
-      const monthlyPerCapita = provinceData.expenditurePerCapita
-      const totalExpense = monthlyPerCapita * this.dependents
+      const totalExpense = province.expenditurePerCapita * this.dependents
       const balance = this.income - totalExpense
-      const balancePercentage = (balance / this.income) * 100
-      const umpComparison = (this.income / provinceData.ump) * 100
-      const incomeVsExpenseRatio = (this.income / totalExpense) * 100
+      const balancePercentage = totalExpense > 0 ? (balance / totalExpense) * 100 : 0
+      const umpComparison = province.ump > 0 ? (this.income / province.ump) * 100 : 0
+      const incomeVsExpenseRatio = totalExpense > 0 ? (this.income / totalExpense) * 100 : 0
 
-      let status: FinancialStatus
-      if (balance > 0) {
-        status = 'surplus'
-      } else if (balance < 0) {
-        status = 'deficit'
-      } else {
-        status = 'neutral'
-      }
+      let status: FinancialStatus = 'neutral'
+      if (balance > 0) status = 'surplus'
+      else if (balance < 0) status = 'deficit'
 
       return {
         totalExpense,
@@ -63,79 +97,212 @@ export const useCalculatorStore = defineStore('calculator', {
         umpComparison,
         incomeVsExpenseRatio,
         status,
-        monthlyPerCapita,
-        expenditureFood: (provinceData.expenditureFood || 0) * this.dependents,
-        expenditureNonFood: (provinceData.expenditureNonFood || 0) * this.dependents,
+        monthlyPerCapita: province.expenditurePerCapita,
+        expenditureFood: province.expenditureFood || 0,
+        expenditureNonFood: province.expenditureNonFood || 0,
       }
     },
 
     /**
-     * Check if all required inputs are provided for calculation
-     */
-    isCalculationReady(): boolean {
-      return (
-        this.selectedProvinceId !== null &&
-        this.income > 0 &&
-        this.dependents > 0 &&
-        this.currentProvinceData !== null &&
-        (this.currentProvinceData?.expenditurePerCapita || 0) > 0
-      )
-    },
-
-    /**
-     * Generate analysis text based on calculation results
+     * Get analysis text based on calculation results
      */
     analysisText(): string {
-      const result = this.calculationResult
-      if (!result) return ''
+      const results = this.calculationResults
+      if (!results) return ''
 
-      const ratio = result.incomeVsExpenseRatio
+      const ratio = results.incomeVsExpenseRatio
 
-      if (result.status === 'deficit') {
-        return `Penghasilan Anda belum menutup estimasi biaya hidup layak untuk jumlah tanggungan ini. Anda menghabiskan sekitar ${ratio.toFixed(1)}% gaji untuk kebutuhan ${this.dependents} orang.`
-      } else if (ratio < 120) {
-        return `Penghasilan Anda cukup untuk menutup kebutuhan dasar, namun margin surplus tipis. Disarankan untuk menabung minimal 20% dari penghasilan.`
-      } else if (ratio < 150) {
-        return `Kondisi keuangan Anda sehat dengan surplus yang memadai. Anda dapat mengalokasikan sisa untuk tabungan, investasi, atau dana darurat.`
-      } else {
-        return `Kondisi keuangan Anda sangat baik! Penghasilan Anda jauh di atas estimasi kebutuhan. Manfaatkan surplus untuk investasi jangka panjang.`
+      if (ratio >= 150) {
+        return 'Kondisi keuangan sangat sehat. Gaji kamu jauh melebihi kebutuhan hidup standar di provinsi ini.'
       }
+      if (ratio >= 120) {
+        return 'Kondisi keuangan sehat. Masih ada ruang untuk menabung dan berinvestasi.'
+      }
+      if (ratio >= 100) {
+        return 'Kondisi keuangan cukup. Gaji pas dengan kebutuhan, perlu bijak dalam pengeluaran.'
+      }
+      if (ratio >= 80) {
+        return 'Kondisi keuangan perlu perhatian. Pengeluaran melebihi pendapatan, pertimbangkan untuk mengurangi biaya.'
+      }
+      return 'Kondisi keuangan kritis. Segera evaluasi pengeluaran atau cari sumber pendapatan tambahan.'
     },
   },
 
   actions: {
+    /**
+     * Set income value
+     */
     setIncome(value: number) {
       this.income = Math.max(0, value)
     },
 
+    /**
+     * Set number of dependents
+     */
     setDependents(value: number) {
-      this.dependents = Math.max(1, Math.floor(value))
+      this.dependents = Math.max(1, Math.min(20, value))
     },
 
-    selectProvince(provinceId: string, provinceName: string) {
-      this.selectedProvinceId = provinceId
-      this.selectedProvinceName = provinceName
+    /**
+     * Select a province
+     */
+    selectProvince(id: string, name: string) {
+      this.selectedProvinceId = id
+      this.selectedProvinceName = name
     },
 
-    setProvinceData(data: Record<string, ProvinceData>) {
-      this.provinceData = data
-      this.isDataLoaded = true
-    },
-
+    /**
+     * Set loading state
+     */
     setLoading(value: boolean) {
       this.isLoading = value
     },
 
-    setError(error: string | null) {
-      this.error = error
+    /**
+     * Set error message
+     */
+    setError(message: string | null) {
+      this.error = message
     },
 
-    reset() {
-      this.income = 0
-      this.dependents = 1
-      this.selectedProvinceId = null
-      this.selectedProvinceName = ''
+    /**
+     * Load expenditure data from CSV (with caching)
+     */
+    async loadExpenditureData(): Promise<void> {
+      // Skip if already loaded
+      if (this.isDataLoaded && Object.keys(this.provinceData).length > 0) {
+        return
+      }
+
+      this.isLoading = true
       this.error = null
+
+      try {
+        // Initialize with UMP data
+        const data: Record<string, ProvinceData> = {}
+        UMP_DATA.forEach((ump) => {
+          data[ump.id] = {
+            name: ump.name,
+            expenditurePerCapita: 0,
+            expenditureFood: 0,
+            expenditureNonFood: 0,
+            ump: ump.ump,
+          }
+        })
+
+        // Fetch CSV
+        const response = await fetch('/pengeluaran_perkapita_2024.csv')
+        if (!response.ok) throw new Error('Gagal memuat data pengeluaran')
+
+        const csvText = await response.text()
+
+        // Parse CSV (non-blocking with setTimeout)
+        await new Promise<void>((resolve) => {
+          setTimeout(() => {
+            const results = Papa.parse<ExpenditureCSVRow>(csvText, {
+              header: true,
+              skipEmptyLines: true,
+              dynamicTyping: true,
+            })
+
+            results.data.forEach((row) => {
+              const provinceName = row.Provinsi?.trim()
+              if (!provinceName || provinceName === 'Indonesia') return
+
+              const foodKey = 'Rata-rata Pengeluaran per Kapita Sebulan di Perkotaan dan Perdesaan - Makanan'
+              const nonFoodKey = 'Rata-rata Pengeluaran per Kapita Sebulan di Perkotaan dan Perdesaan - Bukan Makanan'
+              const totalKey = 'Rata-rata Pengeluaran per Kapita Sebulan di Perkotaan dan Perdesaan - Jumlah'
+
+              const foodExpenditure = typeof row[foodKey] === 'number'
+                ? row[foodKey]
+                : parseFloat(String(row[foodKey] || 0).replace(/[^\d.]/g, ''))
+
+              const nonFoodExpenditure = typeof row[nonFoodKey] === 'number'
+                ? row[nonFoodKey]
+                : parseFloat(String(row[nonFoodKey] || 0).replace(/[^\d.]/g, ''))
+
+              const totalExpenditure = typeof row[totalKey] === 'number'
+                ? row[totalKey]
+                : parseFloat(String(row[totalKey] || 0).replace(/[^\d.]/g, ''))
+
+              const umpData = getUmpByProvinceName(provinceName)
+              if (umpData && data[umpData.id]) {
+                data[umpData.id] = {
+                  ...data[umpData.id],
+                  expenditurePerCapita: totalExpenditure,
+                  expenditureFood: foodExpenditure,
+                  expenditureNonFood: nonFoodExpenditure,
+                }
+              }
+            })
+
+            resolve()
+          }, 0)
+        })
+
+        this.provinceData = data
+        this.isDataLoaded = true
+      } catch (err) {
+        this.error = err instanceof Error ? err.message : 'Terjadi kesalahan'
+        throw err
+      } finally {
+        this.isLoading = false
+      }
+    },
+
+    /**
+     * Load GeoJSON data (with caching)
+     * CRITICAL: Returns RAW object, NOT reactive to prevent Vue proxying thousands of coordinates
+     */
+    async loadGeoJson(): Promise<IndonesiaGeoJson> {
+      // Return cached data if available (non-reactive)
+      if (this.isGeoJsonLoaded && geoJsonCache) {
+        return geoJsonCache
+      }
+
+      try {
+        const response = await fetch(GEOJSON_URL)
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
+
+        const data = await response.json() as IndonesiaGeoJson
+
+        // Normalize properties
+        data.features = data.features.map((feature) => {
+          const props = feature.properties
+          const name = (props.Propinsi || props.PROVINSI || props.provinsi || props.name || '').trim()
+          const id = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+
+          return {
+            ...feature,
+            properties: {
+              ...props,
+              normalizedName: name,
+              normalizedId: id,
+            },
+          }
+        })
+
+        // CRITICAL: markRaw prevents Vue from making this reactive
+        // This is essential because GeoJSON has thousands of coordinates
+        geoJsonCache = markRaw(data)
+        this.isGeoJsonLoaded = true
+        return geoJsonCache
+      } catch (err) {
+        throw new Error(err instanceof Error ? err.message : 'Gagal memuat peta')
+      }
+    },
+
+    /**
+     * Helper to get province name from GeoJSON properties
+     */
+    getProvinceName(properties: ProvinceGeoJsonProperties): string {
+      return (
+        properties.Propinsi ||
+        properties.PROVINSI ||
+        properties.provinsi ||
+        properties.name ||
+        ''
+      ).trim()
     },
   },
 })

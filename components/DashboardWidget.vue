@@ -2,15 +2,14 @@
 /**
  * Dashboard Widget - Orchestrates all dashboard sub-components
  * 
- * This component manages the calculator interface, handling user inputs
- * and displaying calculation results through modular sub-components.
+ * OPTIMIZATIONS:
+ * - Uses store getters directly (no unnecessary props)
+ * - Computed properties for derived state
  */
 import { useCalculatorStore } from '~/stores/calculator'
 import type { ProvinceOption } from '~/types'
 
-// Sub-components are auto-imported by Nuxt with folder prefix (Dashboard*)
-
-const props = defineProps<{
+defineProps<{
   provinceList: ProvinceOption[]
 }>()
 
@@ -18,22 +17,22 @@ const store = useCalculatorStore()
 
 // Handle province selection from InputForm
 const handleProvinceSelect = (provinceId: string) => {
-  const province = props.provinceList.find(p => p.id === provinceId)
+  const province = store.provinceList.find(p => p.id === provinceId)
   if (province) {
     store.selectProvince(province.id, province.name)
   }
 }
 
 // Computed values from store
-const result = computed(() => store.calculationResult)
-const isReady = computed(() => store.isCalculationReady)
-const provinceData = computed(() => store.currentProvinceData)
+const result = computed(() => store.calculationResults)
+const isReady = computed(() => store.selectedProvinceId && store.currentProvince)
+const provinceData = computed(() => store.currentProvince)
 const analysisText = computed(() => store.analysisText)
 </script>
 
 <template>
   <div class="space-y-6">
-    <!-- Header -->
+    <!-- Header (static content) -->
     <DashboardHeader />
 
     <!-- Input Section -->
@@ -89,12 +88,10 @@ const analysisText = computed(() => store.analysisText)
         :province-name="store.selectedProvinceName"
       />
 
-      <!-- Info Note -->
-      <div class="text-xs text-gray-400 text-center px-4">
-        <p>
-          * Data pengeluaran per kapita berdasarkan Survei Sosial Ekonomi Nasional (SUSENAS) BPS 2024
-        </p>
-      </div>
+      <!-- Info Note (static) -->
+      <p v-once class="text-xs text-gray-400 text-center px-4">
+        * Data pengeluaran per kapita berdasarkan Survei Sosial Ekonomi Nasional (SUSENAS) BPS 2024
+      </p>
     </template>
   </div>
 </template>

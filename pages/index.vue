@@ -1,125 +1,103 @@
 <script setup lang="ts">
 /**
- * Main Calculator Page
+ * Landing Page - Finara Financial Calculator
  * 
- * Renders a split-screen layout with an interactive map on the left
- * and a dashboard with inputs and results on the right.
+ * A professional, mobile-first landing page that introduces the app,
+ * creates trust, and leads users to the calculator.
  */
-import { useCalculatorStore } from '~/stores/calculator'
-import { useExpenditureData } from '~/composables/useExpenditureData'
-
-const store = useCalculatorStore()
-const { loadExpenditureData, getProvinceList } = useExpenditureData()
-
-// Load expenditure data on mount
-onMounted(async () => {
-  try {
-    store.setLoading(true)
-    const data = await loadExpenditureData()
-    store.setProvinceData(data)
-  } catch {
-    store.setError('Gagal memuat data pengeluaran')
-  } finally {
-    store.setLoading(false)
-  }
-})
 
 // SEO Configuration
 useHead({
-  title: 'Kalkulator Beban Hidup - Hitung Kesehatan Finansial Anda',
+  title: 'Finara - Kalkulator Beban Hidup Indonesia',
   meta: [
     {
       name: 'description',
-      content: 'Kalkulator untuk menghitung beban hidup dan kesehatan finansial berdasarkan data BPS Indonesia. Bandingkan penghasilan dengan UMR dan pengeluaran per kapita di setiap provinsi.',
+      content: 'Cek apakah gaji kamu cukup untuk biaya hidup di Indonesia. Kalkulator beban hidup berdasarkan data BPS 2024 dan UMR seluruh provinsi.',
     },
     {
       name: 'keywords',
-      content: 'kalkulator beban hidup, pengeluaran per kapita, UMR Indonesia, BPS, kesehatan finansial',
+      content: 'kalkulator beban hidup, UMR Indonesia, pengeluaran per kapita, BPS 2024, kesehatan finansial, gaji cukup',
     },
+    { property: 'og:title', content: 'Finara - Kalkulator Beban Hidup Indonesia' },
+    { property: 'og:description', content: 'Cek apakah gaji kamu cukup untuk biaya hidup di Indonesia berdasarkan data BPS 2024.' },
+    { property: 'og:type', content: 'website' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: 'Finara - Kalkulator Beban Hidup Indonesia' },
+    { name: 'twitter:description', content: 'Cek apakah gaji kamu cukup untuk biaya hidup di Indonesia berdasarkan data BPS 2024.' },
   ],
 })
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- Mobile Header -->
-    <header class="lg:hidden bg-white border-b border-gray-100 px-4 py-4 sticky top-0 z-50">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-primary-400 rounded-xl flex items-center justify-center">
-          <span class="text-xl">💰</span>
-        </div>
-        <div>
-          <h1 class="font-bold text-gray-900">Beban Hidup</h1>
-          <p class="text-xs text-gray-500">Kalkulator Finansial</p>
-        </div>
-      </div>
-    </header>
+  <div class="min-h-screen bg-white">
+    <!-- Navbar -->
+    <LandingTheNavbar />
 
-    <!-- Loading Overlay -->
-    <Transition name="fade">
-      <div
-        v-if="store.isLoading"
-        class="fixed inset-0 bg-white/80 backdrop-blur-sm z-[9999] flex items-center justify-center"
-      >
-        <div class="text-center">
-          <div class="w-12 h-12 border-4 border-primary-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p class="text-gray-600 font-medium">Memuat data BPS...</p>
-        </div>
-      </div>
-    </Transition>
+    <!-- Main Content -->
+    <main>
+      <!-- Hero Section -->
+      <LandingHeroSection />
 
-    <!-- Main Layout -->
-    <div class="flex flex-col lg:flex-row min-h-screen lg:h-screen">
-      <!-- Left: Map Section (Desktop) / Bottom on Mobile -->
-      <div class="order-2 lg:order-1 lg:flex-1 p-4 lg:p-6">
-        <div class="h-[400px] lg:h-full">
-          <ClientOnly>
-            <MapWidget :province-list="getProvinceList" />
-            <template #fallback>
-              <div class="h-full w-full rounded-3xl bg-gray-100 flex items-center justify-center">
-                <div class="text-center">
-                  <div class="w-10 h-10 border-4 border-primary-400 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                  <p class="text-gray-500">Memuat peta...</p>
-                </div>
-              </div>
-            </template>
-          </ClientOnly>
-        </div>
-      </div>
+      <!-- Features Section -->
+      <LandingFeaturesSection />
 
-      <!-- Right: Dashboard Section -->
-      <div class="order-1 lg:order-2 w-full lg:w-[420px] xl:w-[480px] bg-white lg:border-l border-gray-100 overflow-y-auto">
-        <div class="p-4 lg:p-6 pb-8">
-          <DashboardWidget :province-list="getProvinceList" />
-        </div>
-      </div>
-    </div>
+      <!-- About Section -->
+      <LandingAboutSection />
 
-    <!-- Footer (Mobile Only) -->
-    <footer class="lg:hidden bg-white border-t border-gray-100 px-4 py-4 text-center">
-      <p class="text-xs text-gray-400">
-        Data berdasarkan BPS Indonesia 2024
-      </p>
-    </footer>
+      <!-- CTA Section -->
+      <section class="py-16 lg:py-24 bg-primary-400 relative overflow-hidden">
+        <!-- Background decoration -->
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+          <div class="absolute -top-20 -right-20 w-80 h-80 bg-primary-300 rounded-full blur-3xl opacity-50" />
+          <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-primary-500 rounded-full blur-3xl opacity-30" />
+        </div>
+
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            Siap Cek Kesehatan Finansialmu?
+          </h2>
+          <p class="text-lg lg:text-xl text-gray-800 mb-8 max-w-2xl mx-auto">
+            Gratis, tanpa registrasi, dan data kamu aman tidak disimpan di mana pun.
+          </p>
+          <NuxtLink
+            to="/calculator"
+            class="inline-flex items-center gap-3 px-10 py-5 bg-gray-900 text-white font-bold text-lg rounded-2xl shadow-ios-xl hover:bg-gray-800 hover:-translate-y-1 active:translate-y-0 transition-all duration-300"
+          >
+            Mulai Hitung Sekarang
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </NuxtLink>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <LandingTheFooter />
   </div>
 </template>
 
 <style>
-/* Fade transition for loading overlay */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
+/* Global smooth scroll */
+html {
+  scroll-behavior: smooth;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+/* Custom scrollbar for the whole page */
+::-webkit-scrollbar {
+  width: 10px;
 }
 
-/* Ensure full height on desktop */
-@media (min-width: 1024px) {
-  .lg\:h-screen {
-    height: 100vh;
-  }
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 </style>

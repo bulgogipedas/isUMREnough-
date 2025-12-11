@@ -36,3 +36,4 @@ export default defineNuxtConfig({
     configPath: 'tailwind.config.ts',
   },
 })
+

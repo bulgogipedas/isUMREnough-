@@ -66,3 +66,4 @@ const formattedBalance = computed(() => {
     </div>
   </BaseCard>
 </template>
+

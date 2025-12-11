@@ -159,3 +159,4 @@ export interface ExpenditureCSVRow {
   'Rata-rata Pengeluaran per Kapita Sebulan di Perkotaan dan Perdesaan - Jumlah': string | number
   [key: string]: string | number
 }
+

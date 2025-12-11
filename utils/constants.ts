@@ -98,3 +98,4 @@ export function getUmpByProvinceName(name: string): UmpDataItem | undefined {
 
   return found
 }
+

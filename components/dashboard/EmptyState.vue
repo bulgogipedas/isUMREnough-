@@ -13,3 +13,4 @@ import { AlertCircle } from 'lucide-vue-next'
     </p>
   </BaseCard>
 </template>
+

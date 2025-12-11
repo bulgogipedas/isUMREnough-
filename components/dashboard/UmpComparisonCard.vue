@@ -40,3 +40,4 @@ const progressColor = computed(() =>
     </div>
   </BaseCard>
 </template>
+
