@@ -74,6 +74,24 @@ export interface CalculatorState {
   isLoading: boolean
   isDataLoaded: boolean
   error: string | null
+  // Comparison feature
+  targetProvinceId: string | null
+  targetProvinceName: string
+  showComparison: boolean
+}
+
+/**
+ * Comparison insight between two provinces
+ */
+export interface ComparisonInsight {
+  /** Difference in surplus (target - origin) */
+  diffSurplus: number
+  /** Whether target province yields more money */
+  isBetter: boolean
+  /** Percentage change in costs */
+  percentageChange: number
+  /** Difference in monthly per capita expenditure */
+  diffExpenditure: number
 }
 
 // ============================================

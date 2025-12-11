@@ -2,14 +2,15 @@ import { defineStore } from 'pinia'
 import { markRaw } from 'vue'
 import Papa from 'papaparse'
 import { UMP_DATA, getUmpByProvinceName } from '~/utils/constants'
+import { calculateFinancials, getAnalysisText, calculateComparisonInsight } from '~/utils/calculator'
 import type {
   ProvinceData,
   CalculationResult,
-  FinancialStatus,
   ProvinceOption,
   ExpenditureCSVRow,
   IndonesiaGeoJson,
   ProvinceGeoJsonProperties,
+  ComparisonInsight,
 } from '~/types'
 
 const GEOJSON_URL = 'https://raw.githubusercontent.com/superpikar/indonesia-geojson/master/indonesia-province.json'
@@ -23,6 +24,11 @@ interface CalculatorState {
   dependents: number
   selectedProvinceId: string | null
   selectedProvinceName: string
+
+  // Comparison feature
+  targetProvinceId: string | null
+  targetProvinceName: string
+  showComparison: boolean
 
   // Data cache (loaded once, reused)
   provinceData: Record<string, ProvinceData>
@@ -42,6 +48,11 @@ export const useCalculatorStore = defineStore('calculator', {
     dependents: 1,
     selectedProvinceId: null,
     selectedProvinceName: '',
+    // Comparison feature
+    targetProvinceId: null,
+    targetProvinceName: '',
+    showComparison: false,
+    // Data cache
     provinceData: {},
     isLoading: false,
     isDataLoaded: false,
@@ -51,11 +62,19 @@ export const useCalculatorStore = defineStore('calculator', {
 
   getters: {
     /**
-     * Get current province data
+     * Get current province data (origin)
      */
     currentProvince(): ProvinceData | null {
       if (!this.selectedProvinceId) return null
       return this.provinceData[this.selectedProvinceId] || null
+    },
+
+    /**
+     * Get target province data
+     */
+    targetProvince(): ProvinceData | null {
+      if (!this.targetProvinceId) return null
+      return this.provinceData[this.targetProvinceId] || null
     },
 
     /**
@@ -74,57 +93,73 @@ export const useCalculatorStore = defineStore('calculator', {
     },
 
     /**
-     * Calculate financial results
+     * Get province list excluding the origin province (for target selection)
+     */
+    targetProvinceList(): ProvinceOption[] {
+      return this.provinceList.filter((p) => p.id !== this.selectedProvinceId)
+    },
+
+    /**
+     * Calculate financial results for origin province
+     * Uses the reusable calculateFinancials utility
      */
     calculationResults(): CalculationResult | null {
       const province = this.currentProvince
-      if (!province || province.expenditurePerCapita === 0) return null
+      if (!province) return null
 
-      const totalExpense = province.expenditurePerCapita * this.dependents
-      const balance = this.income - totalExpense
-      const balancePercentage = totalExpense > 0 ? (balance / totalExpense) * 100 : 0
-      const umpComparison = province.ump > 0 ? (this.income / province.ump) * 100 : 0
-      const incomeVsExpenseRatio = totalExpense > 0 ? (this.income / totalExpense) * 100 : 0
+      return calculateFinancials({
+        income: this.income,
+        dependents: this.dependents,
+        provinceData: province,
+      })
+    },
 
-      let status: FinancialStatus = 'neutral'
-      if (balance > 0) status = 'surplus'
-      else if (balance < 0) status = 'deficit'
+    /**
+     * Calculate financial results for target province
+     * Uses the same reusable calculateFinancials utility
+     */
+    targetCalculation(): CalculationResult | null {
+      const province = this.targetProvince
+      if (!province) return null
 
-      return {
-        totalExpense,
-        balance,
-        balancePercentage,
-        umpComparison,
-        incomeVsExpenseRatio,
-        status,
-        monthlyPerCapita: province.expenditurePerCapita,
-        expenditureFood: province.expenditureFood || 0,
-        expenditureNonFood: province.expenditureNonFood || 0,
-      }
+      return calculateFinancials({
+        income: this.income,
+        dependents: this.dependents,
+        provinceData: province,
+      })
+    },
+
+    /**
+     * Get comparison insight between origin and target provinces
+     */
+    comparisonInsight(): ComparisonInsight | null {
+      const origin = this.calculationResults
+      const target = this.targetCalculation
+      
+      if (!origin || !target) return null
+
+      return calculateComparisonInsight(origin, target)
     },
 
     /**
      * Get analysis text based on calculation results
+     * Uses the reusable getAnalysisText utility
      */
     analysisText(): string {
       const results = this.calculationResults
       if (!results) return ''
 
-      const ratio = results.incomeVsExpenseRatio
+      return getAnalysisText(results.incomeVsExpenseRatio)
+    },
 
-      if (ratio >= 150) {
-        return 'Kondisi keuangan sangat sehat. Gaji kamu jauh melebihi kebutuhan hidup standar di provinsi ini.'
-      }
-      if (ratio >= 120) {
-        return 'Kondisi keuangan sehat. Masih ada ruang untuk menabung dan berinvestasi.'
-      }
-      if (ratio >= 100) {
-        return 'Kondisi keuangan cukup. Gaji pas dengan kebutuhan, perlu bijak dalam pengeluaran.'
-      }
-      if (ratio >= 80) {
-        return 'Kondisi keuangan perlu perhatian. Pengeluaran melebihi pendapatan, pertimbangkan untuk mengurangi biaya.'
-      }
-      return 'Kondisi keuangan kritis. Segera evaluasi pengeluaran atau cari sumber pendapatan tambahan.'
+    /**
+     * Get analysis text for target province
+     */
+    targetAnalysisText(): string {
+      const results = this.targetCalculation
+      if (!results) return ''
+
+      return getAnalysisText(results.incomeVsExpenseRatio)
     },
   },
 
@@ -144,11 +179,59 @@ export const useCalculatorStore = defineStore('calculator', {
     },
 
     /**
-     * Select a province
+     * Select a province (origin)
      */
     selectProvince(id: string, name: string) {
       this.selectedProvinceId = id
       this.selectedProvinceName = name
+      
+      // If the selected origin is the same as target, clear target
+      if (this.targetProvinceId === id) {
+        this.targetProvinceId = null
+        this.targetProvinceName = ''
+      }
+    },
+
+    /**
+     * Select target province for comparison
+     */
+    selectTargetProvince(id: string, name: string) {
+      this.targetProvinceId = id
+      this.targetProvinceName = name
+    },
+
+    /**
+     * Clear target province selection
+     */
+    clearTargetProvince() {
+      this.targetProvinceId = null
+      this.targetProvinceName = ''
+    },
+
+    /**
+     * Toggle comparison widget visibility
+     */
+    toggleComparison() {
+      this.showComparison = !this.showComparison
+      
+      // Reset target when hiding
+      if (!this.showComparison) {
+        this.targetProvinceId = null
+        this.targetProvinceName = ''
+      }
+    },
+
+    /**
+     * Set comparison visibility
+     */
+    setShowComparison(value: boolean) {
+      this.showComparison = value
+      
+      // Reset target when hiding
+      if (!value) {
+        this.targetProvinceId = null
+        this.targetProvinceName = ''
+      }
     },
 
     /**

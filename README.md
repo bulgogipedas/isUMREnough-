@@ -1,88 +1,67 @@
-# Finara 💰
+# Finara
 
-[![Nuxt 3](https://img.shields.io/badge/Nuxt-3.x-00DC82?style=flat-square&logo=nuxt.js)](https://nuxt.com/)
-[![Vue 3](https://img.shields.io/badge/Vue-3.x-4FC08D?style=flat-square&logo=vue.js)](https://vuejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
+**Financial Health Assessment Platform**
 
-**Gaji Kamu Cukup Nggak Tinggal di Sini?**
-
-Finara adalah kalkulator beban hidup yang membantu masyarakat Indonesia memahami apakah penghasilannya cukup untuk biaya hidup di provinsi tertentu, berdasarkan data resmi BPS dan UMR.
+A comprehensive tool designed to analyze financial viability across different Indonesian provinces based on official BPS (Statistics Indonesia) data and regional minimum wage standards (UMR/UMP).
 
 ---
 
-## ✨ Features
+## Features
 
-| Feature | Description |
-|---------|-------------|
-| 🗺️ **Peta Interaktif** | Pilih provinsi langsung dari peta Indonesia |
-| ⚡ **Real-time Calculation** | Hasil update instan saat mengubah input |
-| 📊 **Data Akurat** | Menggunakan data BPS SUSENAS 2024 |
-| 🔒 **Privasi Aman** | Semua kalkulasi di browser, data tidak disimpan |
-| 📱 **Mobile-First** | Responsive design untuk semua perangkat |
-| 🎨 **iOS-Style UI** | Clean, minimal aesthetics dengan yellow accent |
+- **Interactive Geospatial Visualization**  
+  Renders Indonesia's 38 provinces using Leaflet.js with performance-optimized GeoJSON rendering. Province selection via click interaction with real-time style updates.
 
----
+- **Real-time Financial Calculation**  
+  Instant assessment of surplus/deficit based on income, dependents, and per capita expenditure data. Calculations are performed client-side with reactive state management.
 
-## 🖼️ Screenshots
+- **Regional Comparison**  
+  Comparative analysis tool allowing users to evaluate purchasing power parity between different provinces. Displays cost differential and savings potential.
 
-### Landing Page
-- Hero section dengan statistik
-- Feature cards (Bento grid)
-- About section dengan sumber data
-
-### Calculator
-- Interactive Indonesia map
-- Province dropdown selector
-- Real-time surplus/deficit analysis
-- UMR comparison progress bar
-- Detailed expense breakdown
+- **Privacy-First Architecture**  
+  Client-side processing ensures user financial data never leaves the browser. No server-side data collection or storage.
 
 ---
 
-## 🛠️ Tech Stack
+## Technology Stack
 
 | Category | Technology |
 |----------|------------|
-| Framework | Nuxt 3 + Vue 3 |
+| Framework | Nuxt 3 (Vue 3) |
 | Language | TypeScript |
+| State Management | Pinia |
 | Styling | Tailwind CSS |
-| State | Pinia |
-| Maps | Vue Leaflet |
-| CSV Parsing | PapaParse |
+| Maps | Leaflet / Vue-Leaflet |
+| Data Processing | PapaParse |
 | Icons | Lucide Vue |
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 finara/
 ├── components/
-│   ├── base/                    # Reusable UI atoms
-│   ├── dashboard/               # Calculator sub-components
-│   ├── landing/                 # Landing page sections
-│   │   ├── TheNavbar.vue
-│   │   ├── HeroSection.vue
-│   │   ├── FeaturesSection.vue
-│   │   ├── AboutSection.vue
-│   │   ├── CalculatorSection.vue
-│   │   └── TheFooter.vue
-│   └── map/                     # Map components
-├── composables/                 # Vue composables
-├── stores/                      # Pinia stores
-├── types/                       # TypeScript definitions
-├── utils/                       # Helper functions
+│   ├── base/           # Reusable UI components
+│   ├── dashboard/      # Calculator and result components
+│   ├── landing/        # Landing page sections
+│   └── map/            # Map visualization
+├── composables/        # Vue composables
+├── stores/             # Pinia state management
+├── types/              # TypeScript definitions
+├── utils/              # Helper functions and constants
 └── pages/
-    └── index.vue                # Landing page
+    ├── index.vue       # Landing page
+    └── calculator.vue  # Main application
 ```
 
 ---
 
-## 🚀 Getting Started
+## Local Development
 
 ### Prerequisites
-- [Bun](https://bun.sh/) (recommended) or Node.js 18+
+
+- Node.js 18+ or Bun runtime
+- Package manager (npm, yarn, or bun)
 
 ### Installation
 
@@ -93,14 +72,21 @@ cd isUMREnough-
 
 # Install dependencies
 bun install
-
-# Start development server
-bun run dev
+# or
+npm install
 ```
 
-Visit `http://localhost:3000`
+### Development Server
 
-### Build for Production
+```bash
+bun run dev
+# or
+npm run dev
+```
+
+Application runs at `http://localhost:3000`
+
+### Production Build
 
 ```bash
 bun run build
@@ -109,34 +95,46 @@ bun run preview
 
 ---
 
-## 📊 Data Sources
+## Calculation Methodology
+
+```
+Total Expenditure = Per Capita Expenditure × Number of Dependents
+Balance = Monthly Income - Total Expenditure
+Status = Surplus (Balance > 0) | Deficit (Balance < 0)
+```
+
+Financial health ratio is calculated as:
+
+```
+Ratio = (Income / Total Expenditure) × 100
+
+>=150%  : Excellent
+>=120%  : Good
+>=100%  : Adequate
+>=80%   : Needs Attention
+<80%    : Critical
+```
+
+---
+
+## Data Sources
 
 | Data | Source | Year |
 |------|--------|------|
-| Pengeluaran per Kapita | BPS SUSENAS | 2024 |
-| UMR/UMP | Official Government | 2024 |
-| Indonesia Map | [superpikar/indonesia-geojson](https://github.com/superpikar/indonesia-geojson) | - |
+| Per Capita Expenditure | BPS SUSENAS | 2024 |
+| Provincial Minimum Wage (UMP) | Government Standards | 2024 |
+| Indonesia GeoJSON | superpikar/indonesia-geojson | - |
 
 ---
 
-## 🧮 How It Works
+## License
 
-```
-Total Pengeluaran = Pengeluaran per Kapita × Jumlah Tanggungan
-Saldo = Penghasilan - Total Pengeluaran
-Status = Surplus (jika Saldo > 0) | Defisit (jika Saldo < 0)
-```
+MIT License
 
 ---
 
-## 📝 License
+## Acknowledgments
 
-MIT License - feel free to use this project for any purpose.
-
----
-
-## 🙏 Acknowledgments
-
-- **BPS Indonesia** - Data pengeluaran per kapita
-- **Pemerintah Provinsi** - Data UMR/UMP
-- **superpikar** - Indonesia GeoJSON
+- Badan Pusat Statistik (BPS) Indonesia for expenditure data
+- Provincial governments for minimum wage data
+- superpikar for Indonesia GeoJSON
