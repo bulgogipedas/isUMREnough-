@@ -11,13 +11,8 @@ import { ArrowRight, TrendingUp, MapPin, Calculator } from 'lucide-vue-next'
 </script>
 
 <template>
-  <section class="relative min-h-screen flex items-center pt-20 lg:pt-0 overflow-hidden bg-white">
-    <!-- Background Decorations (static) -->
-    <div v-once class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute -top-40 -right-40 w-[500px] h-[500px] bg-primary-200 rounded-full blur-3xl opacity-40" />
-      <div class="absolute -bottom-40 -left-40 w-[400px] h-[400px] bg-gray-200 rounded-full blur-3xl opacity-50" />
-      <div class="absolute top-1/3 left-1/4 w-32 h-32 bg-primary-300 rounded-full blur-2xl opacity-30" />
-    </div>
+  <section class="relative min-h-screen flex items-center pt-20 lg:pt-0 overflow-hidden">
+    <!-- Background handled by global mesh gradient in index.vue -->
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 relative">
       <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
@@ -89,8 +84,8 @@ import { ArrowRight, TrendingUp, MapPin, Calculator } from 'lucide-vue-next'
 
         <!-- Visual/Illustration -->
         <div class="flex-1 relative animate-fade-in-delay">
-          <!-- Main Card -->
-          <div class="relative bg-white rounded-3xl shadow-ios-xl p-6 lg:p-8 border border-gray-100">
+          <!-- Main Card (Glassmorphism) -->
+          <div class="relative bg-white/80 backdrop-blur-sm rounded-3xl shadow-ios-xl p-6 lg:p-8 border border-white/50">
             <!-- Floating Elements (static, no animation) -->
             <div class="absolute -top-4 -left-4 bg-primary-400 rounded-2xl p-3 shadow-ios-lg">
               <MapPin class="w-6 h-6 text-gray-900" />
@@ -169,3 +164,6 @@ import { ArrowRight, TrendingUp, MapPin, Calculator } from 'lucide-vue-next'
   opacity: 0;
 }
 </style>
+
+
+

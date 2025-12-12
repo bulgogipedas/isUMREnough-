@@ -67,3 +67,4 @@ const ratioTextColor = computed(() =>
   </BaseCard>
 </template>
 
+

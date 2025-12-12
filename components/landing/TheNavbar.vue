@@ -14,6 +14,7 @@ const closeMenu = () => {
 const navLinks = [
   { label: 'Fitur', href: '#features' },
   { label: 'Tentang', href: '#about' },
+  { label: 'FAQ', href: '#faq' },
 ]
 
 // Close menu on route change
@@ -109,3 +110,6 @@ onMounted(() => {
     </Transition>
   </nav>
 </template>
+
+
+

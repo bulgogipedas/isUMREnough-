@@ -44,7 +44,7 @@ interface CalculatorState {
 
 export const useCalculatorStore = defineStore('calculator', {
   state: (): CalculatorState => ({
-    income: 5000000,
+    income: 0, // Start empty - user must enter their income
     dependents: 1,
     selectedProvinceId: null,
     selectedProvinceName: '',
@@ -389,3 +389,4 @@ export const useCalculatorStore = defineStore('calculator', {
     },
   },
 })
+

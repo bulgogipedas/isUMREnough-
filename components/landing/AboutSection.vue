@@ -12,15 +12,14 @@ const highlights = [
 </script>
 
 <template>
-  <section id="about" class="py-16 lg:py-24 bg-gray-50 relative overflow-hidden">
-    <!-- Background decoration -->
-    <div class="absolute bottom-0 right-0 w-96 h-96 bg-primary-200 rounded-full blur-3xl opacity-20 translate-x-1/2 translate-y-1/2" />
+  <section id="about" class="py-16 lg:py-24 relative overflow-hidden">
+    <!-- Background handled by global mesh gradient in index.vue -->
     
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
         <!-- Left Content -->
         <div class="flex-1">
-          <span class="inline-block px-4 py-1.5 bg-primary-100 text-primary-700 text-sm font-semibold rounded-full mb-4">
+          <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/80 backdrop-blur-sm text-primary-700 text-sm font-semibold rounded-full mb-4 border border-white/50 shadow-sm">
             Tentang
           </span>
           <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
@@ -46,9 +45,9 @@ const highlights = [
           </div>
         </div>
 
-        <!-- Right - Data Sources Card -->
+        <!-- Right - Data Sources Card (Glassmorphism) -->
         <div class="flex-1 w-full">
-          <div class="bg-white rounded-3xl p-6 lg:p-8 shadow-ios-lg border border-gray-100">
+          <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 lg:p-8 shadow-bento border border-white/50">
             <h3 class="text-xl font-bold text-gray-900 mb-6">Sumber Data</h3>
             
             <div class="space-y-4">
@@ -107,3 +106,6 @@ const highlights = [
     </div>
   </section>
 </template>
+
+
+

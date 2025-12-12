@@ -2,3 +2,6 @@
   <NuxtPage />
 </template>
 
+
+
+
