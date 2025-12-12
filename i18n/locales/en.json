@@ -16,25 +16,70 @@
     "titleHighlight": "Enough?",
     "subtitle": "Calculate your financial health based on real expenditure data from BPS. Compare cost of living across provinces with the latest data.",
     "cta": "Start Calculating",
-    "ctaSecondary": "Learn More"
+    "ctaSecondary": "Learn Features",
+    "badge": "BPS Data 2024",
+    "stats": {
+      "provinces": "Provinces",
+      "data": "Data",
+      "free": "Free"
+    }
   },
   "features": {
-    "title": "Why Finara?",
+    "badge": "Key Features",
+    "title": "Why Choose",
+    "subtitle": "Designed to provide accurate and easy-to-understand financial insights.",
     "bps": {
       "title": "Official BPS Data",
-      "description": "Using SUSENAS 2024 data for accurate calculations"
+      "description": "Using per capita expenditure data from BPS 2024 and official minimum wages for all Indonesian provinces.",
+      "provinces": "Provinces",
+      "latestData": "Latest Data"
     },
     "privacy": {
       "title": "Privacy Safe",
-      "description": "All calculations in browser, your data is never sent"
+      "description": "Data is not stored on any server. All calculations are done directly in your browser.",
+      "badge": "100% Client-side"
     },
     "realtime": {
       "title": "Real-time",
-      "description": "Instant results as you type, no loading"
+      "description": "Instant calculation results. Change input, see results immediately without delay.",
+      "badge": "0ms delay"
     },
     "compare": {
-      "title": "Compare Cities",
-      "description": "See cost of living differences between provinces"
+      "title": "City Comparison",
+      "description": "Compare cost of living between provinces to help with relocation decisions for work or study.",
+      "cityA": "City A",
+      "cityB": "City B",
+      "perMonth": "/month",
+      "cheaper": "cheaper"
+    }
+  },
+  "about": {
+    "badge": "About",
+    "title": "What is",
+    "description1": "(Financial Ara/Calculator) is a cost of living calculator that helps you understand whether your income is sufficient for the cost of living in a specific province in Indonesia.",
+    "description2": "Using official data from the Central Statistics Agency (BPS), you can get an accurate picture of your financial condition compared to average expenditures in your area.",
+    "highlights": {
+      "1": "Per capita expenditure data from SUSENAS BPS 2024",
+      "2": "Official UMR/UMP data for 38 Indonesian provinces",
+      "3": "Calculations based on number of dependents",
+      "4": "Automatic surplus/deficit analysis",
+      "5": "No login or registration required",
+      "6": "Open source and free forever"
+    },
+    "sources": {
+      "title": "Data Sources",
+      "bps": {
+        "title": "Central Statistics Agency",
+        "desc": "Per capita expenditure data 2024"
+      },
+      "ump": {
+        "title": "UMP 2024",
+        "desc": "Official Provincial Minimum Wage"
+      },
+      "geojson": {
+        "title": "Indonesia GeoJSON",
+        "desc": "Indonesian province map"
+      }
     }
   },
   "calculator": {
@@ -127,30 +172,43 @@
     "clickProvince": "Click a province on the map"
   },
   "faq": {
+    "badge": "FAQ",
     "title": "Frequently Asked Questions",
+    "subtitle": "Answers to commonly asked questions.",
+    "contact": "Still have questions?",
+    "contactLink": "Contact us",
     "q1": {
       "question": "Where does this data come from?",
-      "answer": "Data comes from the National Socio-Economic Survey (SUSENAS) BPS 2024 and official minimum wage data from the Ministry of Manpower."
+      "answer": "Per capita expenditure data comes from the Central Statistics Agency (BPS) Indonesia 2024. UMR/UMP data comes from official governor decisions for each province. We update data annually following official publications."
     },
     "q2": {
       "question": "Is my salary data stored?",
-      "answer": "No. All calculations are done directly in your browser. Data is never sent to any server."
+      "answer": "Not at all. All calculations are done 100% in your browser (client-side). No data is sent to our servers. You can check yourself in the Network tab — no requests carry your personal data."
     },
     "q3": {
       "question": "How accurate is this calculation?",
-      "answer": "Calculations are based on average per capita expenditure. Individual lifestyle will affect actual results."
+      "answer": "This calculation is an estimate based on average per capita expenditure. Actual results may differ depending on lifestyle, specific location within the province, spending habits, and other personal factors. Use as initial guidance, not final decision."
+    },
+    "q4": {
+      "question": "What's the difference between per capita expenditure and UMR?",
+      "answer": "Per capita expenditure is the average expenditure per person per month based on BPS surveys. UMR (Regional Minimum Wage) is the minimum salary standard set by the government. They can differ significantly — for example, UMR can be higher than average expenditure."
+    },
+    "q5": {
+      "question": "Why are some provinces in deficit?",
+      "answer": "Some provinces have UMR lower than average per capita expenditure. This indicates that workers with UMR salaries in those provinces may struggle to meet basic needs without additional income."
     }
-  },
-  "about": {
-    "title": "About Finara",
-    "description": "Finara helps you understand your financial health based on real Indonesian data."
-  },
-  "footer": {
-    "copyright": "Data based on Indonesia BPS 2024"
   },
   "ticker": {
     "umr": "Min. Wage",
-    "expense": "Expenditure"
+    "expense": "Expenditure",
+    "avgDeficit": "Avg Deficit",
+    "avgSurplus": "Avg Surplus"
+  },
+  "footer": {
+    "description": "Cost of living calculator to help Indonesian people understand their financial health.",
+    "viewOnGithub": "View on GitHub",
+    "dataSource": "Data Source: BPS",
+    "copyright": "© {year} Finara. All rights reserved."
   },
   "theme": {
     "light": "Light Mode",
@@ -159,5 +217,10 @@
   },
   "language": {
     "switch": "Change Language"
+  },
+  "cta": {
+    "title": "Ready to Check Your Financial Health?",
+    "subtitle": "Free, no registration, and your data is safe — never stored anywhere.",
+    "button": "Start Calculating Now"
   }
 }

@@ -1,11 +1,7 @@
 <script setup lang="ts">
 /**
  * Interactive Map Widget - Premium "Data Art" Style
- * 
- * Features:
- * - Dynamic tile layer (light/dark mode)
- * - Subtle, thin borders
- * - Smooth transitions
+ * With Dark Mode Support
  */
 import { shallowRef, computed } from 'vue'
 import { LMap, LTileLayer, LGeoJson } from '@vue-leaflet/vue-leaflet'
@@ -218,7 +214,7 @@ const handleMouseOut = (e: LeafletMouseEvent) => {
       <Transition name="fade">
         <div
           v-if="hoveredProvinceName && !isLoading"
-          class="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] bg-slate-900/90 dark:bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg"
+          class="absolute top-4 left-1/2 -translate-x-1/2 z-[1000] bg-slate-900/90 dark:bg-slate-100/90 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg"
         >
           <p class="text-white dark:text-slate-900 font-medium text-sm">{{ hoveredProvinceName }}</p>
         </div>
@@ -240,7 +236,7 @@ const handleMouseOut = (e: LeafletMouseEvent) => {
       <!-- Instruction hint -->
       <div
         v-if="!store.selectedProvinceName && !isLoading && !error"
-        class="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000] bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-md"
+        class="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000] bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm px-4 py-2 rounded-full shadow-md border border-slate-200 dark:border-slate-700"
       >
         <p class="text-slate-500 dark:text-slate-400 text-xs font-medium">{{ t('map.clickProvince') }}</p>
       </div>
@@ -278,13 +274,13 @@ const handleMouseOut = (e: LeafletMouseEvent) => {
       <!-- Custom Zoom -->
       <div class="absolute bottom-4 right-4 z-[1000] flex flex-col gap-1.5">
         <button
-          class="w-10 h-10 bg-white dark:bg-slate-700 hover:bg-amber-50 dark:hover:bg-amber-900/30 rounded-xl shadow-lg dark:shadow-none dark:border dark:border-slate-600 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-all duration-300 active:scale-95"
+          class="w-10 h-10 bg-white dark:bg-slate-700 hover:bg-amber-50 dark:hover:bg-amber-900/30 rounded-xl shadow-lg dark:shadow-none border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-all duration-300 active:scale-95"
           @click="mapRef?.leafletObject?.zoomIn()"
         >
           <span class="text-xl font-light">+</span>
         </button>
         <button
-          class="w-10 h-10 bg-white dark:bg-slate-700 hover:bg-amber-50 dark:hover:bg-amber-900/30 rounded-xl shadow-lg dark:shadow-none dark:border dark:border-slate-600 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-all duration-300 active:scale-95"
+          class="w-10 h-10 bg-white dark:bg-slate-700 hover:bg-amber-50 dark:hover:bg-amber-900/30 rounded-xl shadow-lg dark:shadow-none border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:text-amber-600 dark:hover:text-amber-400 transition-all duration-300 active:scale-95"
           @click="mapRef?.leafletObject?.zoomOut()"
         >
           <span class="text-xl font-light">−</span>

@@ -30,17 +30,17 @@ const toggleTheme = () => {
   colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
 }
 
+const isDark = computed(() => colorMode.value === 'dark')
+
 const navLinks = computed(() => [
   { label: t('nav.features'), href: '#features' },
   { label: t('nav.about'), href: '#about' },
   { label: t('nav.faq'), href: '#faq' },
 ])
 
-// Close menu on route change
 const route = useRoute()
 watch(() => route.fullPath, closeMenu)
 
-// Close menus on click outside
 onMounted(() => {
   const handleClickOutside = (e: MouseEvent) => {
     const target = e.target as HTMLElement
@@ -61,7 +61,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg border-b border-gray-100 dark:border-slate-800 transition-colors duration-300">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-b border-gray-200 dark:border-slate-700 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16 lg:h-20">
         <!-- Logo -->
@@ -80,45 +80,57 @@ onMounted(() => {
             v-for="link in navLinks"
             :key="link.href"
             :href="link.href"
-            class="text-gray-600 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white font-medium transition-colors duration-200"
+            class="text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white font-medium transition-colors duration-200"
           >
             {{ link.label }}
           </a>
           
-          <!-- Theme Toggle -->
+          <!-- Theme Toggle - Pill Style -->
           <button
             @click="toggleTheme"
-            class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300"
-            :title="colorMode.value === 'dark' ? t('theme.light') : t('theme.dark')"
+            class="relative flex items-center w-20 h-10 bg-slate-200 dark:bg-slate-700 rounded-full p-1 transition-colors duration-300"
+            :title="isDark ? t('theme.light') : t('theme.dark')"
           >
-            <Transition name="rotate" mode="out-in">
-              <Sun v-if="colorMode.value === 'dark'" class="w-5 h-5 text-yellow-500" />
-              <Moon v-else class="w-5 h-5 text-slate-600" />
-            </Transition>
+            <!-- Sliding background -->
+            <div 
+              class="absolute w-8 h-8 bg-white dark:bg-slate-500 rounded-full shadow-md transition-all duration-300 ease-out"
+              :class="isDark ? 'translate-x-10' : 'translate-x-0'"
+            />
+            <!-- Icons -->
+            <div class="relative z-10 flex items-center justify-between w-full px-1.5">
+              <Sun 
+                class="w-5 h-5 transition-colors duration-300"
+                :class="isDark ? 'text-slate-500' : 'text-amber-500'"
+              />
+              <Moon 
+                class="w-5 h-5 transition-colors duration-300"
+                :class="isDark ? 'text-amber-300' : 'text-slate-400'"
+              />
+            </div>
           </button>
 
           <!-- Language Switcher -->
           <div class="relative lang-menu">
             <button
               @click.stop="toggleLangMenu"
-              class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all duration-300"
+              class="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 border border-slate-200 dark:border-slate-600 transition-all duration-300"
             >
-              <Globe class="w-4 h-4 text-slate-600 dark:text-slate-400" />
-              <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 uppercase">{{ locale }}</span>
+              <Globe class="w-4 h-4 text-slate-600 dark:text-slate-300" />
+              <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 uppercase">{{ locale }}</span>
             </button>
             
             <Transition name="dropdown">
               <div
                 v-if="isLangMenuOpen"
-                class="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-ios-lg dark:shadow-none dark:border dark:border-slate-700 overflow-hidden min-w-[120px]"
+                class="absolute top-full right-0 mt-2 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden min-w-[140px]"
               >
                 <button
                   @click="switchLanguage('id')"
                   :class="[
-                    'w-full px-4 py-2.5 text-left text-sm font-medium transition-colors',
+                    'w-full px-4 py-3 text-left text-sm font-medium transition-colors flex items-center gap-2',
                     locale === 'id' 
-                      ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400' 
-                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300' 
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700'
                   ]"
                 >
                   🇮🇩 Indonesia
@@ -126,10 +138,10 @@ onMounted(() => {
                 <button
                   @click="switchLanguage('en')"
                   :class="[
-                    'w-full px-4 py-2.5 text-left text-sm font-medium transition-colors',
+                    'w-full px-4 py-3 text-left text-sm font-medium transition-colors flex items-center gap-2',
                     locale === 'en' 
-                      ? 'bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400' 
-                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
+                      ? 'bg-primary-50 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300' 
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700'
                   ]"
                 >
                   🇺🇸 English
@@ -148,19 +160,31 @@ onMounted(() => {
 
         <!-- Mobile Controls -->
         <div class="flex lg:hidden items-center gap-2">
-          <!-- Theme Toggle (Mobile) -->
+          <!-- Theme Toggle (Mobile) - Pill -->
           <button
             @click="toggleTheme"
-            class="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors duration-200"
+            class="relative flex items-center w-16 h-8 bg-slate-200 dark:bg-slate-700 rounded-full p-0.5 transition-colors duration-300"
           >
-            <Sun v-if="colorMode.value === 'dark'" class="w-5 h-5 text-yellow-500" />
-            <Moon v-else class="w-5 h-5 text-gray-600" />
+            <div 
+              class="absolute w-7 h-7 bg-white dark:bg-slate-500 rounded-full shadow-md transition-all duration-300 ease-out"
+              :class="isDark ? 'translate-x-8' : 'translate-x-0'"
+            />
+            <div class="relative z-10 flex items-center justify-between w-full px-1">
+              <Sun 
+                class="w-4 h-4 transition-colors duration-300"
+                :class="isDark ? 'text-slate-500' : 'text-amber-500'"
+              />
+              <Moon 
+                class="w-4 h-4 transition-colors duration-300"
+                :class="isDark ? 'text-amber-300' : 'text-slate-400'"
+              />
+            </div>
           </button>
 
           <!-- Language Toggle (Mobile) -->
           <button
             @click="switchLanguage(locale === 'id' ? 'en' : 'id')"
-            class="px-2 py-1 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
+            class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600"
           >
             {{ locale === 'id' ? 'EN' : 'ID' }}
           </button>
@@ -172,8 +196,8 @@ onMounted(() => {
             :aria-expanded="isMenuOpen"
             aria-label="Toggle menu"
           >
-            <Menu v-if="!isMenuOpen" class="w-6 h-6 text-gray-700 dark:text-slate-300" />
-            <X v-else class="w-6 h-6 text-gray-700 dark:text-slate-300" />
+            <Menu v-if="!isMenuOpen" class="w-6 h-6 text-gray-700 dark:text-slate-200" />
+            <X v-else class="w-6 h-6 text-gray-700 dark:text-slate-200" />
           </button>
         </div>
       </div>
@@ -190,7 +214,7 @@ onMounted(() => {
     >
       <div
         v-if="isMenuOpen"
-        class="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 shadow-ios-lg"
+        class="lg:hidden absolute top-full left-0 right-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700 shadow-lg"
       >
         <div class="px-4 py-4 space-y-2">
           <a
@@ -198,7 +222,7 @@ onMounted(() => {
             :key="link.href"
             :href="link.href"
             @click="closeMenu"
-            class="block px-4 py-3 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 rounded-xl font-medium transition-colors duration-200"
+            class="block px-4 py-3 text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800 rounded-xl font-medium transition-colors duration-200"
           >
             {{ link.label }}
           </a>
@@ -215,19 +239,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.rotate-enter-active,
-.rotate-leave-active {
-  transition: all 0.3s ease;
-}
-.rotate-enter-from {
-  opacity: 0;
-  transform: rotate(-90deg) scale(0.5);
-}
-.rotate-leave-to {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.5);
-}
-
 .dropdown-enter-active,
 .dropdown-leave-active {
   transition: all 0.2s ease;

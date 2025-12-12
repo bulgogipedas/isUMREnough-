@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { Github } from 'lucide-vue-next'
 
+const { t } = useI18n()
 const currentYear = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="bg-gray-900 text-white py-12 lg:py-16">
+  <footer class="bg-gray-900 dark:bg-slate-950 text-white py-12 lg:py-16 border-t border-gray-800 dark:border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
         <!-- Logo & Description -->
@@ -19,7 +20,7 @@ const currentYear = new Date().getFullYear()
             </span>
           </div>
           <p class="text-gray-400 max-w-md">
-            Kalkulator beban hidup untuk membantu masyarakat Indonesia memahami kesehatan finansial mereka.
+            {{ t('footer.description') }}
           </p>
         </div>
 
@@ -29,10 +30,10 @@ const currentYear = new Date().getFullYear()
             href="https://github.com/bulgogipedas/isUMREnough-"
             target="_blank"
             rel="noopener noreferrer"
-            class="flex items-center gap-2 px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl transition-colors duration-200"
+            class="flex items-center gap-2 px-6 py-3 bg-gray-800 dark:bg-slate-800 hover:bg-gray-700 dark:hover:bg-slate-700 rounded-xl transition-colors duration-200 border border-gray-700 dark:border-slate-700"
           >
             <Github class="w-5 h-5" />
-            <span class="font-medium">View on GitHub</span>
+            <span class="font-medium">{{ t('footer.viewOnGithub') }}</span>
           </a>
           <a
             href="https://www.bps.go.id/"
@@ -40,20 +41,17 @@ const currentYear = new Date().getFullYear()
             rel="noopener noreferrer"
             class="text-gray-400 hover:text-white transition-colors duration-200"
           >
-            Data Source: BPS
+            {{ t('footer.dataSource') }}
           </a>
         </div>
       </div>
 
       <!-- Divider -->
-      <div class="border-t border-gray-800 mt-12 pt-8">
+      <div class="border-t border-gray-800 dark:border-slate-800 mt-12 pt-8">
         <p class="text-gray-500 text-sm text-center">
-          © {{ currentYear }} Finara. All rights reserved.
+          {{ t('footer.copyright', { year: currentYear }) }}
         </p>
       </div>
     </div>
   </footer>
 </template>
-
-
-

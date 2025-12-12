@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ArrowRight, TrendingUp, MapPin, Calculator } from 'lucide-vue-next'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 </script>
 
 <template>
@@ -11,24 +11,37 @@ const { t } = useI18n()
         <!-- Text Content -->
         <div class="flex-1 text-center lg:text-left animate-fade-in">
           <!-- Badge -->
-          <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 dark:bg-primary-900/30 rounded-full mb-6">
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-primary-100 dark:bg-primary-900/50 rounded-full mb-6 border border-primary-200 dark:border-primary-800">
             <TrendingUp class="w-4 h-4 text-primary-600 dark:text-primary-400" />
-            <span class="text-sm font-semibold text-primary-700 dark:text-primary-300">{{ t('app.dataSource') }}</span>
+            <span class="text-sm font-semibold text-primary-700 dark:text-primary-300">{{ t('hero.badge') }}</span>
           </div>
 
-          <!-- Headline -->
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-white leading-tight mb-6">
-            {{ t('hero.title') }}
-            <span class="text-primary-500 dark:text-primary-400 relative">
-              {{ t('hero.titleHighlight') }}
-              <svg class="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none" aria-hidden="true">
-                <path d="M2 10C50 2 150 2 198 10" stroke="#facc15" stroke-width="4" stroke-linecap="round"/>
-              </svg>
-            </span>
+          <!-- Headline - Keep original Indonesian structure with SVG -->
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-slate-100 leading-tight mb-6">
+            <template v-if="locale === 'id'">
+              Gaji Kamu
+              <span class="text-primary-500 dark:text-primary-400 relative">
+                Cukup
+                <svg class="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none" aria-hidden="true">
+                  <path d="M2 10C50 2 150 2 198 10" stroke="#facc15" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+              </span>
+              Nggak<br class="hidden sm:block" />
+              Tinggal di Sini?
+            </template>
+            <template v-else>
+              {{ t('hero.title') }}
+              <span class="text-primary-500 dark:text-primary-400 relative">
+                {{ t('hero.titleHighlight') }}
+                <svg class="absolute -bottom-2 left-0 w-full" viewBox="0 0 200 12" fill="none" aria-hidden="true">
+                  <path d="M2 10C50 2 150 2 198 10" stroke="#facc15" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </template>
           </h1>
 
           <!-- Subheadline -->
-          <p class="text-lg lg:text-xl text-gray-600 dark:text-slate-400 mb-8 max-w-xl mx-auto lg:mx-0">
+          <p class="text-lg lg:text-xl text-gray-600 dark:text-slate-300 mb-8 max-w-xl mx-auto lg:mx-0">
             {{ t('hero.subtitle') }}
           </p>
 
@@ -45,78 +58,78 @@ const { t } = useI18n()
             
             <a
               href="#features"
-              class="w-full sm:w-auto px-8 py-4 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-300 font-semibold text-lg rounded-2xl hover:bg-gray-200 dark:hover:bg-slate-700 hover:-translate-y-0.5 transition-all duration-300 text-center"
+              class="w-full sm:w-auto px-8 py-4 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-slate-200 font-semibold text-lg rounded-2xl hover:bg-gray-200 dark:hover:bg-slate-700 hover:-translate-y-0.5 transition-all duration-300 text-center border border-gray-200 dark:border-slate-700"
             >
               {{ t('hero.ctaSecondary') }}
             </a>
           </div>
 
           <!-- Stats -->
-          <div class="flex items-center justify-center lg:justify-start gap-8 mt-12 pt-8 border-t border-gray-100 dark:border-slate-800">
+          <div class="flex items-center justify-center lg:justify-start gap-8 mt-12 pt-8 border-t border-gray-200 dark:border-slate-700">
             <div class="text-center lg:text-left">
-              <p class="text-3xl font-bold text-gray-900 dark:text-white">38</p>
-              <p class="text-sm text-gray-500 dark:text-slate-400">Provinsi</p>
+              <p class="text-3xl font-bold text-gray-900 dark:text-slate-100">38</p>
+              <p class="text-sm text-gray-500 dark:text-slate-400">{{ t('hero.stats.provinces') }}</p>
             </div>
             <div class="w-px h-12 bg-gray-200 dark:bg-slate-700" aria-hidden="true" />
             <div class="text-center lg:text-left">
-              <p class="text-3xl font-bold text-gray-900 dark:text-white">2024</p>
-              <p class="text-sm text-gray-500 dark:text-slate-400">Data</p>
+              <p class="text-3xl font-bold text-gray-900 dark:text-slate-100">2024</p>
+              <p class="text-sm text-gray-500 dark:text-slate-400">{{ t('hero.stats.data') }}</p>
             </div>
             <div class="w-px h-12 bg-gray-200 dark:bg-slate-700" aria-hidden="true" />
             <div class="text-center lg:text-left">
-              <p class="text-3xl font-bold text-gray-900 dark:text-white">100%</p>
-              <p class="text-sm text-gray-500 dark:text-slate-400">Free</p>
+              <p class="text-3xl font-bold text-gray-900 dark:text-slate-100">100%</p>
+              <p class="text-sm text-gray-500 dark:text-slate-400">{{ t('hero.stats.free') }}</p>
             </div>
           </div>
         </div>
 
         <!-- Visual/Illustration -->
         <div class="flex-1 relative animate-fade-in-delay">
-          <div class="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl shadow-ios-xl dark:shadow-none dark:border dark:border-slate-800 p-6 lg:p-8 border border-white/50 transition-colors duration-300">
+          <div class="relative bg-white/90 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl shadow-ios-xl dark:shadow-none p-6 lg:p-8 border border-gray-100 dark:border-slate-700 transition-colors duration-300">
             <!-- Floating Elements -->
             <div class="absolute -top-4 -left-4 bg-primary-400 rounded-2xl p-3 shadow-ios-lg">
               <MapPin class="w-6 h-6 text-gray-900" />
             </div>
-            <div class="absolute -bottom-4 -right-4 bg-surplus-light dark:bg-emerald-900/50 rounded-2xl p-3 shadow-ios-lg dark:shadow-none">
-              <TrendingUp class="w-6 h-6 text-surplus-dark dark:text-emerald-400" />
+            <div class="absolute -bottom-4 -right-4 bg-emerald-100 dark:bg-emerald-900/60 rounded-2xl p-3 shadow-ios-lg dark:shadow-none border border-transparent dark:border-emerald-800/50">
+              <TrendingUp class="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
             </div>
 
             <!-- Mock Calculator Preview -->
             <div class="space-y-4">
               <div class="flex items-center gap-3 mb-6">
-                <div class="w-10 h-10 bg-primary-100 dark:bg-primary-900/30 rounded-xl flex items-center justify-center">
+                <div class="w-10 h-10 bg-primary-100 dark:bg-primary-900/50 rounded-xl flex items-center justify-center border border-primary-200 dark:border-primary-800">
                   <Calculator class="w-5 h-5 text-primary-600 dark:text-primary-400" />
                 </div>
                 <div>
-                  <p class="font-semibold text-gray-900 dark:text-white">{{ t('calculator.title') }}</p>
+                  <p class="font-semibold text-gray-900 dark:text-slate-100">{{ t('calculator.title') }}</p>
                   <p class="text-sm text-gray-500 dark:text-slate-400">{{ t('calculator.subtitle') }}</p>
                 </div>
               </div>
 
               <div class="space-y-3">
-                <div class="bg-gray-50 dark:bg-slate-800 rounded-2xl p-4">
+                <div class="bg-gray-50 dark:bg-slate-800/80 rounded-2xl p-4 border border-gray-100 dark:border-slate-700">
                   <p class="text-xs text-gray-500 dark:text-slate-400 mb-1">{{ t('calculator.province.label') }}</p>
-                  <p class="font-semibold text-gray-800 dark:text-white">DKI Jakarta</p>
+                  <p class="font-semibold text-gray-800 dark:text-slate-100">DKI Jakarta</p>
                 </div>
-                <div class="bg-gray-50 dark:bg-slate-800 rounded-2xl p-4">
+                <div class="bg-gray-50 dark:bg-slate-800/80 rounded-2xl p-4 border border-gray-100 dark:border-slate-700">
                   <p class="text-xs text-gray-500 dark:text-slate-400 mb-1">{{ t('calculator.income.label') }}</p>
-                  <p class="font-semibold text-gray-800 dark:text-white">Rp 8.000.000</p>
+                  <p class="font-semibold text-gray-800 dark:text-slate-100">Rp 8.000.000</p>
                 </div>
-                <div class="bg-gray-50 dark:bg-slate-800 rounded-2xl p-4">
+                <div class="bg-gray-50 dark:bg-slate-800/80 rounded-2xl p-4 border border-gray-100 dark:border-slate-700">
                   <p class="text-xs text-gray-500 dark:text-slate-400 mb-1">{{ t('calculator.dependents.label') }}</p>
-                  <p class="font-semibold text-gray-800 dark:text-white">2 {{ t('calculator.dependents.unit') }}</p>
+                  <p class="font-semibold text-gray-800 dark:text-slate-100">2 {{ t('calculator.dependents.unit') }}</p>
                 </div>
               </div>
 
-              <div class="bg-surplus-light dark:bg-emerald-900/30 rounded-2xl p-4 mt-4">
+              <div class="bg-emerald-50 dark:bg-emerald-900/40 rounded-2xl p-4 mt-4 border border-emerald-100 dark:border-emerald-800/50">
                 <div class="flex items-center justify-between">
                   <div>
-                    <p class="text-xs text-surplus-dark dark:text-emerald-400 font-medium">Status</p>
-                    <p class="font-bold text-surplus-dark dark:text-emerald-400 text-lg">{{ t('results.surplus').toUpperCase() }}</p>
+                    <p class="text-xs text-emerald-700 dark:text-emerald-300 font-medium">Status</p>
+                    <p class="font-bold text-emerald-700 dark:text-emerald-300 text-lg">{{ t('results.surplus').toUpperCase() }}</p>
                   </div>
                   <div class="text-right">
-                    <p class="text-xs text-surplus-dark dark:text-emerald-400 font-medium">{{ t('results.remaining') }}</p>
-                    <p class="font-bold text-surplus-dark dark:text-emerald-400 text-lg">Rp 2.411.030</p>
+                    <p class="text-xs text-emerald-700 dark:text-emerald-300 font-medium">{{ t('results.remaining') }}</p>
+                    <p class="font-bold text-emerald-700 dark:text-emerald-300 text-lg">Rp 2.411.030</p>
                   </div>
                 </div>
               </div>

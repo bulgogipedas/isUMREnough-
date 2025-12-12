@@ -1,0 +1,163 @@
+{
+  "app": {
+    "name": "Finara",
+    "tagline": "Kalkulator Finansial",
+    "dataSource": "Data BPS Indonesia 2024"
+  },
+  "nav": {
+    "home": "Beranda",
+    "calculator": "Kalkulator",
+    "features": "Fitur",
+    "about": "Tentang",
+    "faq": "FAQ"
+  },
+  "hero": {
+    "title": "Gaji Kamu",
+    "titleHighlight": "Cukup Nggak?",
+    "subtitle": "Hitung kesehatan finansialmu berdasarkan data pengeluaran riil dari BPS. Bandingkan biaya hidup antar provinsi dengan data terkini.",
+    "cta": "Mulai Hitung",
+    "ctaSecondary": "Pelajari Lebih"
+  },
+  "features": {
+    "title": "Kenapa Finara?",
+    "bps": {
+      "title": "Data Resmi BPS",
+      "description": "Menggunakan data SUSENAS 2024 untuk perhitungan yang akurat"
+    },
+    "privacy": {
+      "title": "Privasi Aman",
+      "description": "Semua kalkulasi di browser, data kamu tidak pernah dikirim"
+    },
+    "realtime": {
+      "title": "Real-time",
+      "description": "Hasil instan saat kamu mengetik, tanpa loading"
+    },
+    "compare": {
+      "title": "Bandingkan Kota",
+      "description": "Lihat perbedaan biaya hidup antar provinsi"
+    }
+  },
+  "calculator": {
+    "title": "Kalkulator",
+    "subtitle": "Analisis Finansial",
+    "tabs": {
+      "analysis": "ANALISIS",
+      "compare": "BANDINGKAN"
+    },
+    "income": {
+      "label": "Penghasilan Bulanan",
+      "placeholder": "5.000.000",
+      "helper": "Masukkan total gaji bersih per bulan"
+    },
+    "province": {
+      "label": "Provinsi",
+      "placeholder": "Pilih provinsi...",
+      "helper": "atau klik pada peta"
+    },
+    "dependents": {
+      "label": "Tanggungan",
+      "unit": "orang"
+    },
+    "origin": "Asal",
+    "target": "Tujuan"
+  },
+  "results": {
+    "status": "Status Keuangan",
+    "surplus": "Surplus",
+    "deficit": "Defisit",
+    "balanced": "Seimbang",
+    "allocation": "Alokasi Gaji",
+    "expense": "Pengeluaran",
+    "remaining": "Sisa",
+    "ump": "UMP",
+    "aboveUmp": "Di atas UMP",
+    "belowUmp": "Di bawah UMP",
+    "costOfLiving": "Biaya Hidup",
+    "perCapita": "per kapita/bulan"
+  },
+  "comparison": {
+    "title": "Perbandingan Biaya Hidup",
+    "conclusion": "Kesimpulan",
+    "cheaper": "Pindah ke {province} lebih hemat!",
+    "expensive": "Tetap di {province} lebih hemat",
+    "same": "Biaya hidup sama di kedua kota",
+    "moreSavings": "lebih banyak tersisa per bulan",
+    "lessSavings": "kurang tersisa jika pindah"
+  },
+  "purchasePower": {
+    "sultan": {
+      "label": "SULTAN",
+      "insight": "Bisa beli iPhone baru tiap bulan!"
+    },
+    "comfortable": {
+      "label": "MAPAN",
+      "insight": "Cukup untuk liburan tiap 3 bulan"
+    },
+    "enough": {
+      "label": "CUKUP",
+      "insight": "Masih bisa nabung rutin"
+    },
+    "tight": {
+      "label": "PAS",
+      "insight": "Harus pintar atur keuangan"
+    },
+    "deficit": {
+      "label": "DEFISIT",
+      "insight": "Perlu cari penghasilan tambahan"
+    }
+  },
+  "empty": {
+    "noIncome": {
+      "title": "Rata-rata pengeluaran nasional:",
+      "cta": "Masukkan gaji untuk melihat analisis ↑"
+    },
+    "noProvince": {
+      "title": "Pilih provinsi untuk melihat analisis",
+      "subtitle": "Klik pada peta atau gunakan dropdown"
+    },
+    "compare": {
+      "title": "Pilih dua provinsi dan masukkan gaji",
+      "subtitle": "untuk membandingkan biaya hidup"
+    }
+  },
+  "map": {
+    "title": "Peta Interaktif Indonesia",
+    "loading": "Memuat peta...",
+    "error": "Gagal memuat peta",
+    "clickProvince": "Klik provinsi pada peta"
+  },
+  "faq": {
+    "title": "Pertanyaan Umum",
+    "q1": {
+      "question": "Dari mana data ini berasal?",
+      "answer": "Data berasal dari Survei Sosial Ekonomi Nasional (SUSENAS) BPS 2024 dan data UMP resmi Kementerian Ketenagakerjaan."
+    },
+    "q2": {
+      "question": "Apakah data gaji saya disimpan?",
+      "answer": "Tidak. Semua perhitungan dilakukan langsung di browser kamu. Data tidak pernah dikirim ke server manapun."
+    },
+    "q3": {
+      "question": "Seberapa akurat hitungan ini?",
+      "answer": "Perhitungan berdasarkan rata-rata pengeluaran per kapita. Gaya hidup individual akan mempengaruhi hasil sebenarnya."
+    }
+  },
+  "about": {
+    "title": "Tentang Finara",
+    "description": "Finara membantu kamu memahami kesehatan finansial berdasarkan data riil Indonesia."
+  },
+  "footer": {
+    "copyright": "Data berbasis BPS Indonesia 2024"
+  },
+  "ticker": {
+    "umr": "UMR",
+    "expense": "Pengeluaran"
+  },
+  "theme": {
+    "light": "Mode Terang",
+    "dark": "Mode Gelap",
+    "system": "Ikuti Sistem"
+  },
+  "language": {
+    "switch": "Ganti Bahasa"
+  }
+}

@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   // Color Mode Configuration
   colorMode: {
     classSuffix: '',
-    preference: 'system',
+    preference: 'light',
     fallback: 'light',
     storageKey: 'finara-color-mode',
   },

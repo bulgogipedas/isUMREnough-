@@ -1,54 +1,45 @@
 <script setup lang="ts">
 import { CheckCircle, ExternalLink } from 'lucide-vue-next'
 
-const highlights = [
-  'Data pengeluaran per kapita dari SUSENAS BPS 2024',
-  'Data UMR/UMP resmi 38 provinsi Indonesia',
-  'Perhitungan berdasarkan jumlah tanggungan',
-  'Analisis surplus/defisit otomatis',
-  'Tidak memerlukan login atau registrasi',
-  'Open source dan gratis selamanya',
-]
+const { t } = useI18n()
 </script>
 
 <template>
   <section id="about" class="py-16 lg:py-24 relative overflow-hidden">
-    <!-- Background handled by global mesh gradient in index.vue -->
-    
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
         <!-- Left Content -->
         <div class="flex-1">
-          <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/80 backdrop-blur-sm text-primary-700 text-sm font-semibold rounded-full mb-4 border border-white/50 shadow-sm">
-            Tentang
+          <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm text-primary-700 dark:text-primary-400 text-sm font-semibold rounded-full mb-4 border border-gray-200 dark:border-slate-700 shadow-sm dark:shadow-none">
+            {{ t('about.badge') }}
           </span>
-          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Apa itu <span class="text-primary-500">Finara</span>?
+          <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-slate-100 mb-6">
+            {{ t('about.title') }} <span class="text-primary-500 dark:text-primary-400">Finara</span>?
           </h2>
-          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-            <strong class="text-gray-800">Finara</strong> (Financial Ara/Calculator) adalah kalkulator beban hidup yang membantu kamu memahami apakah penghasilanmu cukup untuk biaya hidup di provinsi tertentu di Indonesia.
+          <p class="text-lg text-gray-600 dark:text-slate-300 mb-8 leading-relaxed">
+            <strong class="text-gray-800 dark:text-white">Finara</strong> {{ t('about.description1') }}
           </p>
-          <p class="text-lg text-gray-600 mb-8 leading-relaxed">
-            Dengan menggunakan data resmi dari <strong class="text-gray-800">Badan Pusat Statistik (BPS)</strong>, kamu bisa mendapatkan gambaran akurat tentang kondisi finansialmu dibandingkan dengan rata-rata pengeluaran di daerahmu.
+          <p class="text-lg text-gray-600 dark:text-slate-300 mb-8 leading-relaxed">
+            {{ t('about.description2') }}
           </p>
 
           <!-- Highlights -->
           <div class="space-y-3">
             <div
-              v-for="highlight in highlights"
-              :key="highlight"
+              v-for="i in 6"
+              :key="i"
               class="flex items-start gap-3"
             >
-              <CheckCircle class="w-5 h-5 text-surplus flex-shrink-0 mt-0.5" />
-              <span class="text-gray-700">{{ highlight }}</span>
+              <CheckCircle class="w-5 h-5 text-emerald-500 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
+              <span class="text-gray-700 dark:text-slate-300">{{ t(`about.highlights.${i}`) }}</span>
             </div>
           </div>
         </div>
 
-        <!-- Right - Data Sources Card (Glassmorphism) -->
+        <!-- Right - Data Sources Card -->
         <div class="flex-1 w-full">
-          <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 lg:p-8 shadow-bento border border-white/50">
-            <h3 class="text-xl font-bold text-gray-900 mb-6">Sumber Data</h3>
+          <div class="bg-white/90 dark:bg-slate-900/80 backdrop-blur-sm rounded-3xl p-6 lg:p-8 shadow-bento dark:shadow-none border border-gray-100 dark:border-slate-700">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-slate-100 mb-6">{{ t('about.sources.title') }}</h3>
             
             <div class="space-y-4">
               <!-- BPS -->
@@ -56,28 +47,28 @@ const highlights = [
                 href="https://www.bps.go.id/"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors duration-200 group"
+                class="flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-800/80 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors duration-200 group border border-transparent dark:border-slate-700"
               >
-                <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-xl flex items-center justify-center flex-shrink-0">
                   <span class="text-2xl">📊</span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
-                    Badan Pusat Statistik
+                  <p class="font-semibold text-gray-900 dark:text-slate-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {{ t('about.sources.bps.title') }}
                   </p>
-                  <p class="text-sm text-gray-500 truncate">Data pengeluaran per kapita 2024</p>
+                  <p class="text-sm text-gray-500 dark:text-slate-400 truncate">{{ t('about.sources.bps.desc') }}</p>
                 </div>
-                <ExternalLink class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors flex-shrink-0" />
+                <ExternalLink class="w-5 h-5 text-gray-400 dark:text-slate-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex-shrink-0" />
               </a>
 
               <!-- UMR Data -->
-              <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl">
-                <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div class="flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-800/80 rounded-2xl border border-transparent dark:border-slate-700">
+                <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-xl flex items-center justify-center flex-shrink-0">
                   <span class="text-2xl">💰</span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="font-semibold text-gray-900">UMP 2024</p>
-                  <p class="text-sm text-gray-500">Upah Minimum Provinsi resmi</p>
+                  <p class="font-semibold text-gray-900 dark:text-slate-100">{{ t('about.sources.ump.title') }}</p>
+                  <p class="text-sm text-gray-500 dark:text-slate-400">{{ t('about.sources.ump.desc') }}</p>
                 </div>
               </div>
 
@@ -86,18 +77,18 @@ const highlights = [
                 href="https://github.com/superpikar/indonesia-geojson"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors duration-200 group"
+                class="flex items-center gap-4 p-4 bg-gray-50 dark:bg-slate-800/80 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors duration-200 group border border-transparent dark:border-slate-700"
               >
-                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-xl flex items-center justify-center flex-shrink-0">
                   <span class="text-2xl">🗺️</span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="font-semibold text-gray-900 group-hover:text-purple-600 transition-colors">
-                    Indonesia GeoJSON
+                  <p class="font-semibold text-gray-900 dark:text-slate-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                    {{ t('about.sources.geojson.title') }}
                   </p>
-                  <p class="text-sm text-gray-500 truncate">Peta provinsi Indonesia</p>
+                  <p class="text-sm text-gray-500 dark:text-slate-400 truncate">{{ t('about.sources.geojson.desc') }}</p>
                 </div>
-                <ExternalLink class="w-5 h-5 text-gray-400 group-hover:text-purple-600 transition-colors flex-shrink-0" />
+                <ExternalLink class="w-5 h-5 text-gray-400 dark:text-slate-500 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors flex-shrink-0" />
               </a>
             </div>
           </div>
@@ -106,6 +97,3 @@ const highlights = [
     </div>
   </section>
 </template>
-
-
-

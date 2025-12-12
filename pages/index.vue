@@ -1,9 +1,4 @@
 <script setup lang="ts">
-/**
- * Landing Page - Finara Financial Calculator
- * With Dark Mode & i18n Support
- */
-
 const { t } = useI18n()
 
 useHead({
@@ -52,7 +47,7 @@ useHead({
       <!-- CTA Section -->
       <section class="py-16 lg:py-24 relative overflow-hidden">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="relative bg-gradient-to-br from-primary-400 via-primary-300 to-yellow-200 dark:from-amber-600 dark:via-amber-500 dark:to-yellow-400 rounded-[2.5rem] p-10 lg:p-16 shadow-ios-xl overflow-hidden">
+          <div class="relative bg-gradient-to-br from-primary-400 via-primary-300 to-yellow-200 dark:from-amber-600 dark:via-amber-500 dark:to-yellow-500 rounded-[2.5rem] p-10 lg:p-16 shadow-ios-xl overflow-hidden">
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
               <div class="absolute -top-20 -right-20 w-60 h-60 bg-white dark:bg-amber-300 rounded-full blur-3xl opacity-20" />
               <div class="absolute -bottom-20 -left-20 w-60 h-60 bg-primary-500 dark:bg-amber-700 rounded-full blur-3xl opacity-20" />
@@ -60,16 +55,16 @@ useHead({
 
             <div class="relative text-center">
               <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-                {{ t('hero.title') }} {{ t('hero.titleHighlight') }}
+                {{ t('cta.title') }}
               </h2>
               <p class="text-lg lg:text-xl text-gray-800 mb-8 max-w-2xl mx-auto">
-                {{ t('hero.subtitle') }}
+                {{ t('cta.subtitle') }}
               </p>
               <NuxtLink
                 to="/calculator"
                 class="inline-flex items-center gap-3 px-10 py-5 bg-gray-900 text-white font-bold text-lg rounded-2xl shadow-ios-xl hover:bg-gray-800 hover:-translate-y-1 hover:shadow-2xl active:translate-y-0 transition-all duration-300"
               >
-                {{ t('hero.cta') }}
+                {{ t('cta.button') }}
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>

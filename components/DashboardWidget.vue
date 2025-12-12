@@ -45,6 +45,21 @@ const handleIncomeInput = (e: Event) => {
   store.setIncome(num)
 }
 
+// Prevent non-numeric input
+const handleIncomeKeydown = (e: KeyboardEvent) => {
+  // Allow: backspace, delete, tab, escape, enter, arrows
+  const allowedKeys = ['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End']
+  if (allowedKeys.includes(e.key)) return
+  
+  // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+  if ((e.ctrlKey || e.metaKey) && ['a', 'c', 'v', 'x'].includes(e.key.toLowerCase())) return
+  
+  // Block non-numeric
+  if (!/^\d$/.test(e.key)) {
+    e.preventDefault()
+  }
+}
+
 const handleProvinceSelect = (e: Event) => {
   const target = e.target as HTMLSelectElement
   const province = store.provinceList.find(p => p.id === target.value)
@@ -166,8 +181,9 @@ const comparison = computed(() => {
               type="text"
               inputmode="numeric"
               :placeholder="t('calculator.income.placeholder')"
-              class="w-full pl-16 lg:pl-20 pr-4 py-4 text-4xl lg:text-5xl font-bold text-slate-800 dark:text-white bg-transparent border-b-2 border-slate-200 dark:border-slate-700 focus:border-amber-400 transition-all duration-300 placeholder:text-slate-200 dark:placeholder:text-slate-700 placeholder:font-light outline-none tracking-tight"
+              class="w-full pl-16 lg:pl-20 pr-4 py-4 text-4xl lg:text-5xl font-bold text-slate-800 dark:text-white bg-transparent border-b-2 border-slate-200 dark:border-slate-700 focus:border-amber-400 transition-all duration-300 placeholder:text-slate-300 dark:placeholder:text-slate-600 placeholder:font-light outline-none tracking-tight"
               @input="handleIncomeInput"
+              @keydown="handleIncomeKeydown"
             >
             <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-amber-400 to-yellow-400 scale-x-0 group-focus-within:scale-x-100 transition-transform duration-300 origin-left" />
           </div>
@@ -398,8 +414,9 @@ const comparison = computed(() => {
               type="text"
               inputmode="numeric"
               :placeholder="t('calculator.income.placeholder')"
-              class="w-full pl-14 pr-4 py-4 text-2xl font-bold text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-amber-200 dark:focus:ring-amber-800"
+              class="w-full pl-14 pr-4 py-4 text-2xl font-bold text-slate-800 dark:text-white bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:ring-2 focus:ring-amber-200 dark:focus:ring-amber-800 outline-none"
               @input="handleIncomeInput"
+              @keydown="handleIncomeKeydown"
             >
           </div>
         </div>

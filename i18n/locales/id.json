@@ -16,25 +16,70 @@
     "titleHighlight": "Cukup Nggak?",
     "subtitle": "Hitung kesehatan finansialmu berdasarkan data pengeluaran riil dari BPS. Bandingkan biaya hidup antar provinsi dengan data terkini.",
     "cta": "Mulai Hitung",
-    "ctaSecondary": "Pelajari Lebih"
+    "ctaSecondary": "Pelajari Fitur",
+    "badge": "Data BPS 2024",
+    "stats": {
+      "provinces": "Provinsi",
+      "data": "Data",
+      "free": "Gratis"
+    }
   },
   "features": {
-    "title": "Kenapa Finara?",
+    "badge": "Fitur Unggulan",
+    "title": "Kenapa Pakai",
+    "subtitle": "Dirancang untuk memberikan insight finansial yang akurat dan mudah dipahami.",
     "bps": {
       "title": "Data Resmi BPS",
-      "description": "Menggunakan data SUSENAS 2024 untuk perhitungan yang akurat"
+      "description": "Menggunakan data pengeluaran per kapita BPS 2024 dan UMR resmi seluruh provinsi Indonesia.",
+      "provinces": "Provinsi",
+      "latestData": "Data Terbaru"
     },
     "privacy": {
       "title": "Privasi Aman",
-      "description": "Semua kalkulasi di browser, data kamu tidak pernah dikirim"
+      "description": "Data tidak disimpan di server. Semua kalkulasi dilakukan langsung di browser kamu.",
+      "badge": "100% Client-side"
     },
     "realtime": {
       "title": "Real-time",
-      "description": "Hasil instan saat kamu mengetik, tanpa loading"
+      "description": "Hasil perhitungan instan. Ubah input, langsung lihat hasilnya tanpa delay.",
+      "badge": "0ms delay"
     },
     "compare": {
-      "title": "Bandingkan Kota",
-      "description": "Lihat perbedaan biaya hidup antar provinsi"
+      "title": "Komparasi Antar Kota",
+      "description": "Bandingkan biaya hidup antar provinsi untuk membantu keputusan pindah kerja atau kuliah.",
+      "cityA": "Kota A",
+      "cityB": "Kota B",
+      "perMonth": "/bulan",
+      "cheaper": "lebih hemat"
+    }
+  },
+  "about": {
+    "badge": "Tentang",
+    "title": "Apa itu",
+    "description1": "(Financial Ara/Calculator) adalah kalkulator beban hidup yang membantu kamu memahami apakah penghasilanmu cukup untuk biaya hidup di provinsi tertentu di Indonesia.",
+    "description2": "Dengan menggunakan data resmi dari Badan Pusat Statistik (BPS), kamu bisa mendapatkan gambaran akurat tentang kondisi finansialmu dibandingkan dengan rata-rata pengeluaran di daerahmu.",
+    "highlights": {
+      "1": "Data pengeluaran per kapita dari SUSENAS BPS 2024",
+      "2": "Data UMR/UMP resmi 38 provinsi Indonesia",
+      "3": "Perhitungan berdasarkan jumlah tanggungan",
+      "4": "Analisis surplus/defisit otomatis",
+      "5": "Tidak memerlukan login atau registrasi",
+      "6": "Open source dan gratis selamanya"
+    },
+    "sources": {
+      "title": "Sumber Data",
+      "bps": {
+        "title": "Badan Pusat Statistik",
+        "desc": "Data pengeluaran per kapita 2024"
+      },
+      "ump": {
+        "title": "UMP 2024",
+        "desc": "Upah Minimum Provinsi resmi"
+      },
+      "geojson": {
+        "title": "Indonesia GeoJSON",
+        "desc": "Peta provinsi Indonesia"
+      }
     }
   },
   "calculator": {
@@ -127,30 +172,43 @@
     "clickProvince": "Klik provinsi pada peta"
   },
   "faq": {
+    "badge": "FAQ",
     "title": "Pertanyaan Umum",
+    "subtitle": "Jawaban untuk pertanyaan yang sering ditanyakan.",
+    "contact": "Masih punya pertanyaan?",
+    "contactLink": "Hubungi kami",
     "q1": {
       "question": "Dari mana data ini berasal?",
-      "answer": "Data berasal dari Survei Sosial Ekonomi Nasional (SUSENAS) BPS 2024 dan data UMP resmi Kementerian Ketenagakerjaan."
+      "answer": "Data pengeluaran per kapita berasal dari Badan Pusat Statistik (BPS) Indonesia tahun 2024. Data UMR/UMP berasal dari keputusan gubernur masing-masing provinsi yang diumumkan secara resmi. Kami memperbarui data setiap tahun mengikuti publikasi resmi."
     },
     "q2": {
       "question": "Apakah data gaji saya disimpan?",
-      "answer": "Tidak. Semua perhitungan dilakukan langsung di browser kamu. Data tidak pernah dikirim ke server manapun."
+      "answer": "Tidak sama sekali. Semua perhitungan dilakukan 100% di browser kamu (client-side). Tidak ada data yang dikirim ke server kami. Kamu bisa cek sendiri di Network tab browser — tidak ada request yang membawa data pribadimu."
     },
     "q3": {
       "question": "Seberapa akurat hitungan ini?",
-      "answer": "Perhitungan berdasarkan rata-rata pengeluaran per kapita. Gaya hidup individual akan mempengaruhi hasil sebenarnya."
+      "answer": "Perhitungan ini adalah estimasi berdasarkan rata-rata pengeluaran per kapita. Hasil sebenarnya bisa berbeda tergantung gaya hidup, lokasi spesifik dalam provinsi, kebiasaan belanja, dan faktor personal lainnya. Gunakan sebagai panduan awal, bukan keputusan final."
+    },
+    "q4": {
+      "question": "Apa bedanya pengeluaran per kapita dengan UMR?",
+      "answer": "Pengeluaran per kapita adalah rata-rata pengeluaran per orang per bulan berdasarkan survei BPS. UMR (Upah Minimum Regional) adalah standar gaji minimum yang ditetapkan pemerintah. Keduanya bisa berbeda jauh — misalnya UMR bisa lebih tinggi dari pengeluaran rata-rata."
+    },
+    "q5": {
+      "question": "Kenapa ada provinsi yang defisit?",
+      "answer": "Beberapa provinsi memiliki UMR yang lebih rendah dari rata-rata pengeluaran per kapita. Ini menunjukkan bahwa pekerja dengan gaji UMR di provinsi tersebut mungkin kesulitan memenuhi kebutuhan dasar tanpa pendapatan tambahan."
     }
-  },
-  "about": {
-    "title": "Tentang Finara",
-    "description": "Finara membantu kamu memahami kesehatan finansial berdasarkan data riil Indonesia."
-  },
-  "footer": {
-    "copyright": "Data berbasis BPS Indonesia 2024"
   },
   "ticker": {
     "umr": "UMR",
-    "expense": "Pengeluaran"
+    "expense": "Pengeluaran",
+    "avgDeficit": "Defisit Rata-rata",
+    "avgSurplus": "Surplus Rata-rata"
+  },
+  "footer": {
+    "description": "Kalkulator beban hidup untuk membantu masyarakat Indonesia memahami kesehatan finansial mereka.",
+    "viewOnGithub": "View on GitHub",
+    "dataSource": "Data Source: BPS",
+    "copyright": "© {year} Finara. All rights reserved."
   },
   "theme": {
     "light": "Mode Terang",
@@ -159,5 +217,10 @@
   },
   "language": {
     "switch": "Ganti Bahasa"
+  },
+  "cta": {
+    "title": "Siap Cek Kesehatan Finansialmu?",
+    "subtitle": "Gratis, tanpa registrasi, dan data kamu aman tidak disimpan di mana pun.",
+    "button": "Mulai Hitung Sekarang"
   }
 }
