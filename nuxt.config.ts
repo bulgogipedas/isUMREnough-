@@ -6,7 +6,34 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
+    '@nuxtjs/color-mode',
+    '@nuxtjs/i18n',
   ],
+
+  // Color Mode Configuration
+  colorMode: {
+    classSuffix: '',
+    preference: 'system',
+    fallback: 'light',
+    storageKey: 'finara-color-mode',
+  },
+
+  // i18n Configuration
+  i18n: {
+    locales: [
+      { code: 'id', name: 'Indonesia', file: 'id.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
+    ],
+    defaultLocale: 'id',
+    lazy: true,
+    langDir: 'locales',
+    strategy: 'no_prefix',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'finara-locale',
+      fallbackLocale: 'id',
+    },
+  },
 
   css: [
     '~/assets/css/main.css',
@@ -15,7 +42,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Kalkulator Beban Hidup',
+      title: 'Finara - Kalkulator Beban Hidup',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -29,12 +56,10 @@ export default defineNuxtConfig({
 
   typescript: {
     strict: true,
-    typeCheck: false, // Disable for faster dev, enable for production builds
+    typeCheck: false,
   },
 
   tailwindcss: {
     configPath: 'tailwind.config.ts',
   },
 })
-
-

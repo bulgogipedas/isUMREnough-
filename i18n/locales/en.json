@@ -1,0 +1,163 @@
+{
+  "app": {
+    "name": "Finara",
+    "tagline": "Financial Calculator",
+    "dataSource": "Indonesia BPS Data 2024"
+  },
+  "nav": {
+    "home": "Home",
+    "calculator": "Calculator",
+    "features": "Features",
+    "about": "About",
+    "faq": "FAQ"
+  },
+  "hero": {
+    "title": "Is Your Salary",
+    "titleHighlight": "Enough?",
+    "subtitle": "Calculate your financial health based on real expenditure data from BPS. Compare cost of living across provinces with the latest data.",
+    "cta": "Start Calculating",
+    "ctaSecondary": "Learn More"
+  },
+  "features": {
+    "title": "Why Finara?",
+    "bps": {
+      "title": "Official BPS Data",
+      "description": "Using SUSENAS 2024 data for accurate calculations"
+    },
+    "privacy": {
+      "title": "Privacy Safe",
+      "description": "All calculations in browser, your data is never sent"
+    },
+    "realtime": {
+      "title": "Real-time",
+      "description": "Instant results as you type, no loading"
+    },
+    "compare": {
+      "title": "Compare Cities",
+      "description": "See cost of living differences between provinces"
+    }
+  },
+  "calculator": {
+    "title": "Calculator",
+    "subtitle": "Financial Analysis",
+    "tabs": {
+      "analysis": "ANALYSIS",
+      "compare": "COMPARE"
+    },
+    "income": {
+      "label": "Monthly Income",
+      "placeholder": "5,000,000",
+      "helper": "Enter your total net salary per month"
+    },
+    "province": {
+      "label": "Province",
+      "placeholder": "Select province...",
+      "helper": "or click on the map"
+    },
+    "dependents": {
+      "label": "Dependents",
+      "unit": "people"
+    },
+    "origin": "Origin",
+    "target": "Target"
+  },
+  "results": {
+    "status": "Financial Status",
+    "surplus": "Surplus",
+    "deficit": "Deficit",
+    "balanced": "Balanced",
+    "allocation": "Salary Allocation",
+    "expense": "Expenses",
+    "remaining": "Remaining",
+    "ump": "Min. Wage",
+    "aboveUmp": "Above Min. Wage",
+    "belowUmp": "Below Min. Wage",
+    "costOfLiving": "Cost of Living",
+    "perCapita": "per capita/month"
+  },
+  "comparison": {
+    "title": "Cost of Living Comparison",
+    "conclusion": "Conclusion",
+    "cheaper": "Moving to {province} is cheaper!",
+    "expensive": "Staying in {province} is cheaper",
+    "same": "Cost of living is the same in both cities",
+    "moreSavings": "more remaining per month",
+    "lessSavings": "less remaining if you move"
+  },
+  "purchasePower": {
+    "sultan": {
+      "label": "WEALTHY",
+      "insight": "Can buy a new iPhone every month!"
+    },
+    "comfortable": {
+      "label": "COMFORTABLE",
+      "insight": "Enough for vacation every 3 months"
+    },
+    "enough": {
+      "label": "ADEQUATE",
+      "insight": "Can still save regularly"
+    },
+    "tight": {
+      "label": "TIGHT",
+      "insight": "Need to manage finances wisely"
+    },
+    "deficit": {
+      "label": "DEFICIT",
+      "insight": "Need additional income source"
+    }
+  },
+  "empty": {
+    "noIncome": {
+      "title": "National average expenditure:",
+      "cta": "Enter salary to see analysis ↑"
+    },
+    "noProvince": {
+      "title": "Select a province to see analysis",
+      "subtitle": "Click on the map or use the dropdown"
+    },
+    "compare": {
+      "title": "Select two provinces and enter salary",
+      "subtitle": "to compare cost of living"
+    }
+  },
+  "map": {
+    "title": "Interactive Map of Indonesia",
+    "loading": "Loading map...",
+    "error": "Failed to load map",
+    "clickProvince": "Click a province on the map"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "q1": {
+      "question": "Where does this data come from?",
+      "answer": "Data comes from the National Socio-Economic Survey (SUSENAS) BPS 2024 and official minimum wage data from the Ministry of Manpower."
+    },
+    "q2": {
+      "question": "Is my salary data stored?",
+      "answer": "No. All calculations are done directly in your browser. Data is never sent to any server."
+    },
+    "q3": {
+      "question": "How accurate is this calculation?",
+      "answer": "Calculations are based on average per capita expenditure. Individual lifestyle will affect actual results."
+    }
+  },
+  "about": {
+    "title": "About Finara",
+    "description": "Finara helps you understand your financial health based on real Indonesian data."
+  },
+  "footer": {
+    "copyright": "Data based on Indonesia BPS 2024"
+  },
+  "ticker": {
+    "umr": "Min. Wage",
+    "expense": "Expenditure"
+  },
+  "theme": {
+    "light": "Light Mode",
+    "dark": "Dark Mode",
+    "system": "Follow System"
+  },
+  "language": {
+    "switch": "Change Language"
+  }
+}
