@@ -2,7 +2,11 @@
 .nuxt/
 .output/
 .nitro/
+dist
 dist/
+
+# Duplicate locales (use i18n/locales instead)
+locales/
 
 # Dependencies
 node_modules/

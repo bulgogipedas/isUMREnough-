@@ -1,132 +1,91 @@
-# Kalkulator Beban Hidup 💰
+# Finara
 
-[![Nuxt 3](https://img.shields.io/badge/Nuxt-3.x-00DC82?style=flat-square&logo=nuxt.js)](https://nuxt.com/)
-[![Vue 3](https://img.shields.io/badge/Vue-3.x-4FC08D?style=flat-square&logo=vue.js)](https://vuejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-06B6D4?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
-[![Pinia](https://img.shields.io/badge/Pinia-2.x-FFD859?style=flat-square)](https://pinia.vuejs.org/)
+**Financial Health Assessment Platform**
 
-A beautiful, iOS-style financial health calculator for Indonesian users. Calculate your cost of living burden based on official BPS (Badan Pusat Statistik) expenditure data and compare your income against provincial minimum wages (UMR).
-
-![Kalkulator Beban Hidup Preview](https://via.placeholder.com/800x400?text=App+Preview)
+A comprehensive tool designed to analyze financial viability across different Indonesian provinces based on official BPS (Statistics Indonesia) data and regional minimum wage standards (UMR/UMP).
 
 ---
 
-## 📋 About
+## Overview
 
-**Kalkulator Beban Hidup** helps Indonesian workers and families understand their financial health by:
-
-- 📊 Calculating total monthly expenses based on per-capita expenditure data from BPS
-- 💼 Comparing income against provincial minimum wages (UMR/UMP)
-- 👨‍👩‍👧‍👦 Adjusting calculations based on number of dependents
-- 🗺️ Providing province-specific data through an interactive map
-
-This tool empowers users to make informed financial decisions by visualizing whether their income creates a surplus or deficit against estimated living costs.
+Finara enables users to evaluate their financial standing by comparing household income against provincial living costs. The platform processes official statistical data to provide accurate surplus/deficit calculations and regional comparisons.
 
 ---
 
-## ✨ Features
+## Features
 
-| Feature | Description |
-|---------|-------------|
-| 🗺️ **Interactive Map** | Click on any Indonesian province to select it for calculation |
-| ⚡ **Real-time Calculation** | Results update instantly as you change inputs |
-| 📱 **Responsive Design** | Desktop split-screen layout, mobile-optimized stacked view |
-| 🎨 **iOS-style UI** | Clean, minimal aesthetics with subtle shadows and rounded corners |
-| 📈 **Visual Analytics** | Progress bars and status indicators for quick comprehension |
-| 🔢 **38 Provinces** | Complete coverage of all Indonesian provinces with 2024 data |
-| 🇮🇩 **Bahasa Indonesia** | Full Indonesian language interface |
+- **Interactive Geospatial Visualization**  
+  Renders Indonesia's 38 provinces using Leaflet.js with performance-optimized GeoJSON rendering. Supports dynamic theme-based map tiles.
 
----
+- **Real-time Financial Calculation**  
+  Instant assessment of surplus/deficit based on income, dependents, and per capita expenditure data.
 
-## 🛠️ Tech Stack
+- **Regional Comparison**  
+  Comparative analysis tool allowing users to evaluate purchasing power parity between different provinces.
 
-### Core Framework
-- **[Nuxt 3](https://nuxt.com/)** - Vue.js meta-framework with SSR support
-- **[Vue 3](https://vuejs.org/)** - Progressive JavaScript framework (Composition API)
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe JavaScript
+- **Privacy-First Architecture**  
+  Client-side processing ensures user financial data never leaves the browser.
 
-### Styling & UI
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
-- **[Lucide Vue](https://lucide.dev/)** - Beautiful icon library
+- **Internationalization**  
+  Full support for Indonesian (ID) and English (EN) languages.
 
-### State & Data
-- **[Pinia](https://pinia.vuejs.org/)** - Vue store library
-- **[PapaParse](https://www.papaparse.com/)** - CSV parsing library
-
-### Mapping
-- **[Vue Leaflet](https://vue-leaflet.github.io/vue-leaflet/)** - Vue wrapper for Leaflet.js
-- **[Leaflet](https://leafletjs.com/)** - Interactive map library
+- **Theme Support**  
+  Light and dark mode with adaptive UI components.
 
 ---
 
-## 📁 Project Structure
+## Technology Stack
 
-```
-kalkulator-beban-hidup/
-├── components/
-│   ├── base/                    # Reusable UI atoms
-│   │   ├── BaseCard.vue
-│   │   ├── BaseButton.vue
-│   │   └── BaseInput.vue
-│   ├── dashboard/               # Dashboard sub-components
-│   │   ├── DashboardHeader.vue
-│   │   ├── InputForm.vue
-│   │   ├── ResultStatus.vue
-│   │   ├── AnalysisCard.vue
-│   │   ├── SummaryCard.vue
-│   │   ├── BreakdownCard.vue
-│   │   ├── UmpComparisonCard.vue
-│   │   └── EmptyState.vue
-│   ├── map/
-│   │   └── MapWidget.vue        # Interactive Indonesia map
-│   └── DashboardWidget.vue      # Dashboard orchestrator
-├── composables/
-│   ├── useExpenditureData.ts    # CSV data loading
-│   ├── useGeoJson.ts            # Map data fetching
-│   └── useStatusConfig.ts       # UI status styling
-├── stores/
-│   └── calculator.ts            # Pinia calculator store
-├── types/
-│   └── index.ts                 # Centralized TypeScript definitions
-├── utils/
-│   ├── constants.ts             # UMP data & province matching
-│   └── formatters.ts            # Currency & number formatting
-├── pages/
-│   └── index.vue                # Main application page
-└── public/
-    └── pengeluaran_perkapita_2024.csv  # BPS expenditure data
-```
+| Category | Technology |
+|----------|------------|
+| Core Framework | Nuxt 3 (Vue 3, TypeScript) |
+| State Management | Pinia |
+| Styling | Tailwind CSS |
+| Maps | Leaflet / Vue-Leaflet |
+| Data Processing | PapaParse |
+| Internationalization | @nuxtjs/i18n |
+| Theme Management | @nuxtjs/color-mode |
 
 ---
 
-## 🚀 Getting Started
+## Local Development
 
 ### Prerequisites
 
-- [Bun](https://bun.sh/) (recommended) or Node.js 18+
+- Node.js 18+ or Bun 1.0+
 - Git
 
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/kalkulator-beban-hidup.git
-cd kalkulator-beban-hidup
-
-# Install dependencies
-bun install
-
-# Start development server
-bun run dev
+git clone https://github.com/bulgogipedas/isUMREnough-.git
+cd isUMREnough-
 ```
 
-The application will be available at `http://localhost:3000`
+```bash
+# Install dependencies
+bun install
+# or
+npm install
+```
 
-### Build for Production
+### Development Server
 
 ```bash
-# Build the application
+bun run dev
+# or
+npm run dev
+```
+
+Application runs at `http://localhost:3000`
+
+### Production Build
+
+```bash
+# Generate static files
+bun run generate
+
+# Build for SSR
 bun run build
 
 # Preview production build
@@ -135,64 +94,63 @@ bun run preview
 
 ---
 
-## 📊 Data Sources
+## Project Structure
 
-### Expenditure Data
-- **Source:** Badan Pusat Statistik (BPS) Indonesia
-- **Dataset:** Survei Sosial Ekonomi Nasional (SUSENAS) 2024
-- **Metric:** Average monthly per-capita expenditure (food + non-food)
-
-### Minimum Wage Data
-- **Source:** Official provincial government announcements
-- **Year:** 2024/2025
-- **Coverage:** 38 Indonesian provinces
-
-### Geographic Data
-- **GeoJSON:** [superpikar/indonesia-geojson](https://github.com/superpikar/indonesia-geojson)
-- **License:** Open source
+```
+├── components/
+│   ├── landing/          # Landing page components
+│   ├── map/              # Map visualization
+│   └── DashboardWidget.vue
+├── composables/          # Reusable composition functions
+├── i18n/
+│   └── locales/          # Translation files (id.json, en.json)
+├── pages/
+│   ├── index.vue         # Landing page
+│   └── calculator.vue    # Main application
+├── stores/               # Pinia state management
+├── types/                # TypeScript definitions
+├── utils/                # Helper functions and constants
+└── public/
+    └── pengeluaran_perkapita_2024.csv
+```
 
 ---
 
-## 🧮 Calculation Logic
+## Calculation Method
 
 ```
-Total Monthly Expense = Per-Capita Expenditure × Number of Dependents
+Total Monthly Expense = Per Capita Expenditure × Number of Dependents
 Balance = Monthly Income - Total Monthly Expense
-UMR Comparison = (Monthly Income / Provincial UMR) × 100%
-Income vs Expense Ratio = (Monthly Income / Total Expense) × 100%
+UMR Ratio = (Monthly Income / Provincial UMR) × 100%
 ```
 
 ### Status Classification
-- **Surplus** 🟢 - Income exceeds expenses
-- **Deficit** 🔴 - Expenses exceed income
-- **Neutral** ⚪ - Income equals expenses
+
+| Status | Condition |
+|--------|-----------|
+| Surplus | Income > Expenses |
+| Deficit | Expenses > Income |
+| Break-even | Income = Expenses |
 
 ---
 
-## 🎨 Design System
+## Data Sources
 
-The UI follows iOS-style aesthetics:
-
-- **Shapes:** Heavily rounded corners (`rounded-2xl`, `rounded-3xl`)
-- **Shadows:** Subtle depth with custom `shadow-ios` utilities
-- **Colors:**
-  - Primary: Yellow (`#facc15`) for optimism
-  - Surplus: Soft green (`#22c55e`)
-  - Deficit: Soft red (`#ef4444`)
-  - Backgrounds: White/Gray-50
-- **Typography:** System font stack for native feel
+| Data Type | Source | Year |
+|-----------|--------|------|
+| Per Capita Expenditure | Badan Pusat Statistik (BPS) - SUSENAS | 2024 |
+| Provincial Minimum Wage | Official Provincial Government Standards | 2024 |
+| Geographic Boundaries | [superpikar/indonesia-geojson](https://github.com/superpikar/indonesia-geojson) | - |
 
 ---
 
-## 📝 License
+## License
 
-This project is open source and available under the [MIT License](LICENSE).
+MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Attribution
 
-- **BPS Indonesia** for providing comprehensive expenditure statistics
-- **superpikar** for the Indonesia GeoJSON data
-- **Nuxt Team** for the amazing Vue.js framework
-- **Tailwind Labs** for the utility-first CSS framework
+- Badan Pusat Statistik (BPS) Indonesia
+- superpikar - Indonesia GeoJSON data
